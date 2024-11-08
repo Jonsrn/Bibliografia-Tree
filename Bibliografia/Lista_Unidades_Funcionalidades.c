@@ -23,30 +23,39 @@ int criar_no_Lista(list_unid **novo_elemento, int unidade){
     return operacao; 
 }
 
-int inserir_na_Lista(list_unid **Raiz, list_unid **novo_elemento) {
+int inserir_na_Lista(list_unid **Raiz, int unidade) {
     int operacao = 1; // 1 indica sucesso
 
     list_unid *anterior = NULL;
     list_unid *atual = *Raiz;
+    list_unid *novo_elemento; 
+    novo_elemento = NULL; 
 
     // Caso especial: inserção na raiz ou antes do primeiro elemento
-    if (*Raiz == NULL || (*novo_elemento)->unidade < (*Raiz)->unidade) {
-        (*novo_elemento)->prox = *Raiz;
-        *Raiz = *novo_elemento;
+    if (*Raiz == NULL || unidade < (*Raiz)->unidade) {        
+
+        operacao = criar_no_Lista(&novo_elemento, unidade);
+        if(operacao == 1){
+            novo_elemento->prox = *Raiz;
+            *Raiz = novo_elemento;
+        }    
     } else {
         // Percorre a lista para encontrar a posição correta de inserção
-        while (atual != NULL && atual->unidade < (*novo_elemento)->unidade) {
+        while (atual != NULL && atual->unidade < unidade) {
             anterior = atual;
             atual = atual->prox;
         }
 
         // Verifica se a unidade já existe na lista
-        if (atual != NULL && atual->unidade == (*novo_elemento)->unidade) {
+        if (atual != NULL && atual->unidade == unidade) {
             operacao = 0; // Unidade já existe, não insere
         } else {
             // Insere o novo elemento na posição encontrada
-            anterior->prox = *novo_elemento;
-            (*novo_elemento)->prox = atual;
+            operacao = criar_no_Lista(&novo_elemento, unidade);
+            if(operacao == 1){
+                anterior->prox = novo_elemento;
+                novo_elemento->prox = atual;
+            }    
         }
     }
 
