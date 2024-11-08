@@ -57,6 +57,7 @@ int inserir_ArvBB_Ingles(ArvBB_ing **Raiz, ArvBB_ing *novo_no, ArvBB_ing **no_ex
 
 }
 
+//Essa função percorre a ArvBB, e recupera os Nós de acordo com um dos critérios, 0 recupera tudo, !=0 recupera valores especificos 
 
 int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, int *tam_vetor){
     int resultado; 

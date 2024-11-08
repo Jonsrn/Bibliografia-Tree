@@ -51,12 +51,19 @@ void sobre();
 void realizar_atividades(); 
 
 //Protótipo das Funções auxiliares
+void adicionar_bibliografia(Arv23Port **Raiz); //Função para importar o txt e preencher a árvore 2-3 e suas subsidiarias 
 
 
 
 
 
 //Protótipos das funções da árvore 2-3
+
+Arv23Port *criarNoArv23(InfArv23 Info, Arv23Port *Filho_Esq, Arv23Port *Filho_Cent); //Função de Criação do Nó da Árvore 2-3
+int ehfolha(Arv23Port *no); // Função pra verificar se é folha, 0 para não, 1 para sim
+Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); //Função que adiciona a Info em um Nó que possui espaço. 
+Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho); // Função responsável por quebrar o Nó já cheio. 
+Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai); //Função de Inserção na Árvore 2-3 de palavra em portugues 
 
 
 
