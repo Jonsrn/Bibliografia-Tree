@@ -101,54 +101,95 @@ Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port 
 
 //Função de inserção ficará aqui. 
 
-Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai){
+Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao, int *info_posicao, Arv23Port **no_referencia){
     Arv23Port *MaiorNo; 
     MaiorNo = NULL; 
-    int comparacao1, comparacao2; 
+    int comparacao1, comparacao2, verificacao; 
     InfArv23 promove1; 
+    verificacao = 0; // 0 significa que não tem palavra igual na árvore
     
 
     if(*no == NULL){
         //Se a árvore for Nula, criaremos o primeiro Nó
         *no = criarNoArv23(Info, NULL, NULL); 
+        if (*no == NULL) {
+            *situacao = 0; // Falha total devido à falha de alocação
+        }else {
+            *situacao = 1;       // Sucesso com nova inserção
+            *no_referencia = *no; // Retorna o endereço do novo nó
+        }
+
     }else{
-        if(ehfolha(*no) == 1){//Se for folha, entra aqui
-            if((*no)->n_infos == 1){
-                //Se tiver uma única info, entra aqui.
-                *no = adicionaChave(*no, Info, NULL); //olhar isso depois
-            }else{
-                //Se já tiver duas infos, entra aqui. 
-                MaiorNo = quebraNo(no, Info, promove, NULL); 
-                if(*Pai == NULL){
-                    *no = criarNoArv23(*promove, *no, MaiorNo); 
-                    MaiorNo = NULL; 
-                }
+
+        comparacao1 = strcmp(Info.palavra_portugues, (*no)->info1.palavra_portugues);
+
+        if(comparacao1 == 0){
+            *situacao = 2; //2 indica que a A info que eu queria inserir já existe em uma das Infos desse Nó
+            *info_posicao = 1; //indica qual posicao está a palavra
+            *no_referencia = *no; //O nó será recuperado por referencia
+            verificacao = 1; //1 indica que tem palavra repetida, portanto, não se deve prosseguir
+        } 
+
+        if((*no)->n_infos == 2){
+            comparacao2 = strcmp(Info.palavra_portugues, (*no)->info2.palavra_portugues);
+            if(comparacao2 == 0){
+                *situacao = 2; //2 indica que a A info que eu queria inserir já existe em uma das Infos desse Nó
+                *info_posicao = 2; //A palavra está na posição 2 do Nó
+                *no_referencia = *no; //recupera o endereço do Nó
+                verificacao = 1; 
             }
-        }else{
-            comparacao1 = strcmp(Info.palavra_portugues, (*no)->info1.palavra_portugues); //Como lidamos com palavras, é necessário comparar strings
-            //Caso não seja folha, é necessário percorrer até chegar na folha. 
-            if(comparacao1 < 0){ 
-                MaiorNo = insereArv23(&((*no)->esq), Info, promove, no); 
-                //A informação é menor do que a Info 1, então obviamente vai pela esquerda
-            }else{
-                //Não é menor do que a Info 1, há duas condições de verificação agr
-                if((*no)->n_infos == 2){
-                    comparacao2 = strcmp(Info.palavra_portugues, (*no)->info2.palavra_portugues); 
-                }
-                
-                if(((*no)->n_infos == 1) || (comparacao2 < 0)){ 
-                    //Verifica se o numero de infos é igual a 1 ou se ele é menor do que a Info 2
-                    //Nesse caso, a inserção caminhará para o centro. 
+        }
 
-                    MaiorNo = insereArv23(&((*no)->cen), Info, promove, no);
+        if(verificacao != 1){
 
+            if(ehfolha(*no) == 1){//Se for folha, entra aqui
+                if((*no)->n_infos == 1){
+                    //Se tiver uma única info, entra aqui.
+                    *no = adicionaChave(*no, Info, NULL); 
+                    *situacao = 1; //1 indica que a palavra não existia e foi adicionada com sucesso
+                    *no_referencia = *no; //recupera o endereço
                 }else{
-                    //A info é maior do que a Info 2, o caminho aqui é pela direita
-                    MaiorNo = insereArv23(&((*no)->dir), Info, promove, no); 
+                    //Se já tiver duas infos, entra aqui. 
+                    MaiorNo = quebraNo(no, Info, promove, NULL); 
+                    if(*Pai == NULL){
+                        *no = criarNoArv23(*promove, *no, MaiorNo); 
+                        MaiorNo = NULL; 
+                    }
+                    *situacao = 1; 
+                    *no_referencia = *no;
                 }
+            }else{
+                comparacao1 = strcmp(Info.palavra_portugues, (*no)->info1.palavra_portugues); //Como lidamos com palavras, é necessário comparar strings
+                //Caso não seja folha, é necessário percorrer até chegar na folha. 
+                if(comparacao1 < 0){ 
+                    MaiorNo = insereArv23(&((*no)->esq), Info, promove, no, situacao, info_posicao, no_referencia); 
+                    //A informação é menor do que a Info 1, então obviamente vai pela esquerda
+                }else{
+                    //Não é menor do que a Info 1, há duas condições de verificação agr
+                    if((*no)->n_infos == 2){
+                        comparacao2 = strcmp(Info.palavra_portugues, (*no)->info2.palavra_portugues); 
+                    }
+                    
+                    if(((*no)->n_infos == 1) || (comparacao2 < 0)){ 
+                        //Verifica se o numero de infos é igual a 1 ou se ele é menor do que a Info 2
+                        //Nesse caso, a inserção caminhará para o centro. 
 
-            } 
+                        MaiorNo = insereArv23(&((*no)->cen), Info, promove, no, situacao, info_posicao, no_referencia);
+
+                    }else{
+                        //A info é maior do que a Info 2, o caminho aqui é pela direita
+                        MaiorNo = insereArv23(&((*no)->dir), Info, promove, no, situacao, info_posicao, no_referencia);
+                    }
+
+                } 
+            }
         }    
+
+
+
+
+
+
     } 
 
         //As pendências agr (quando a função tá voltando na recursão)
@@ -156,7 +197,10 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
         //significa que voltou pendencia aqui
         if((*no)->n_infos == 1){
             //Se o numero de Infos da Chave, for igual a 1, podemos inserir aqui sem quebrar
-            *no = adicionaChave(*no, *promove, MaiorNo); 
+            *no = adicionaChave(*no, *promove, MaiorNo);
+            *situacao = 1; //1 indica nova informação inserida
+            *no_referencia = *no; //recupera o endereço do Nó
+            *info_posicao = 1;  
 
 
         }else{
@@ -170,12 +214,18 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
                 // Se há um pai, a promoção continua
                 *promove = promove1;
             }
+            *situacao = 1;
+            *no_referencia = *no; 
+            *info_posicao = 1; 
         }
     }
 
     return MaiorNo;
 
-} 
+}
+
+
+  
 
 
 
