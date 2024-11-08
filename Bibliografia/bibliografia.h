@@ -5,7 +5,7 @@
 
 typedef struct Lista_Unidades list_unid; //prototipo da lista encadeada das unidades
 typedef struct Infos_exclusao inf_ex; //Essa estrutura aqui é pra armazenar as variaveis de exclusao
-typedef struct InfoArvBB InfoBB;    
+typedef struct InfoArvBB InfoBB; //Essa struct é as infos da ArvBB    
 typedef struct ArvBB_ingles ArvBB_ing; //prototipo da arvore BB, pra colocar as palavras em ingles
 typedef struct Info_Arv_23 InfArv23;  //prototipo da informação da arvore 2-3
 typedef struct ARV_23_Portugues Arv23Port; //prototipo da arvore 2-3
@@ -51,7 +51,8 @@ void sobre();
 void realizar_atividades(); 
 
 //Protótipo das Funções auxiliares
-void adicionar_bibliografia(Arv23Port **Raiz); //Função para importar o txt e preencher a árvore 2-3 e suas subsidiarias 
+char *remover_acentos(char *str);//Remove os acentos das palavras
+void adicionar_bibliografia(Arv23Port **Raiz, const char *filename); //Função para importar o txt e preencher a árvore 2-3 e suas subsidiarias 
 
 
 
