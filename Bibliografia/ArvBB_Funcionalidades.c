@@ -24,35 +24,44 @@ ArvBB_ing* criar_no_ArvBB(InfoBB info){
 
 }
 
-int inserir_ArvBB_Ingles(ArvBB_ing **Raiz, ArvBB_ing *novo_no, ArvBB_ing **no_existente){
+int inserir_ArvBB_Ingles(ArvBB_ing **Raiz, InfoBB info, ArvBB_ing **no_existente){
      int operacao; 
-     operacao = 1; 
+     operacao = 1; //1 significa que deu certo.
      int comparacao;
+      
 
      if(*Raiz == NULL){
-          *Raiz = novo_no; 
-          *no_existente = *Raiz; 
+          ArvBB_ing *novo_no;
+          novo_no = NULL; 
+
+          novo_no = criar_no_ArvBB(info);
+          if (novo_no == NULL) {
+             operacao = 0; // Indica falha na alocação
+          } else {
+             *Raiz = novo_no;
+             *no_existente = *Raiz; // Retorna o endereço do novo nó
+        } 
+
      }else{
            
-          comparacao = strcmp(novo_no->info.palavra_ingles, (*Raiz)->info.palavra_ingles);
+          comparacao = strcmp(info.palavra_ingles, (*Raiz)->info.palavra_ingles);
 
           if(comparacao < 0){
-               operacao = inserir_ArvBB_Ingles(&(*Raiz)->esq, novo_no, no_existente); 
+               operacao = inserir_ArvBB_Ingles(&(*Raiz)->esq, info, no_existente); 
           }else if(comparacao > 0){
-               operacao = inserir_ArvBB_Ingles(&(*Raiz)->dir, novo_no, no_existente); 
+               operacao = inserir_ArvBB_Ingles(&(*Raiz)->dir, info, no_existente); 
           }else{
                //O nó já está alocado 
-               //Devemos então recuperar o Nó atual, e descartar o que foi criado
+               //Devemos então recuperar o Nó atual
                *no_existente = *Raiz;
-               free(novo_no);
-               operacao = 2;
+            
+               operacao = 2; //2 significa que o Nó já existe, recuperamos o endereço dele
           }
      }
 
      return operacao; 
 
-     //operacao = 1, indica sucesso nominal, inserindo o Nó novo, operacao = 2 indica sucesso,
-     // mas o Nó já existe, então devemos descartar o novo nó criado e usar o Nó que já existe. 
+     //operacao = 1, indica sucesso nominal, inserindo o Nó novo, operacao = 2 indica sucesso, mas o Nó já existe
 
 
 }
