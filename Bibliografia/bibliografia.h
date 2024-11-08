@@ -63,7 +63,7 @@ Arv23Port *criarNoArv23(InfArv23 Info, Arv23Port *Filho_Esq, Arv23Port *Filho_Ce
 int ehfolha(Arv23Port *no); // Função pra verificar se é folha, 0 para não, 1 para sim
 Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); //Função que adiciona a Info em um Nó que possui espaço. 
 Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho); // Função responsável por quebrar o Nó já cheio. 
-Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai); //Função de Inserção na Árvore 2-3 de palavra em portugues 
+Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao, int *info_posicao, Arv23Port **no_referencia); //Função de Inserção na Árvore 2-3 de palavra em portugues 
 
 
 
