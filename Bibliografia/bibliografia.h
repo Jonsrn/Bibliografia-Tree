@@ -22,11 +22,11 @@ typedef struct Infos_exclusao{
 
 typedef struct InfoArvBB{
     char palavra_ingles[100]; 
+    list_unid *unidades; 
 }InfoBB; 
 
 typedef struct ArvBB_ingles{
-    InfoBB info; 
-    list_unid *unidades; 
+    InfoBB info;  
     ArvBB_ing *esq, *dir; 
 }ArvBB_ing;
 
@@ -43,15 +43,17 @@ typedef struct ARV_23_Portugues{
     Arv23Port *esq, *cen, *dir; 
 }Arv23Port;
 
+
+
 //Protótipos dos Menus 
 
 
 void menu_principal(); 
 void sobre(); 
 void realizar_atividades(); 
+void testes_menu(); 
 
 //Protótipo das Funções auxiliares
-char *remover_acentos(char *str);//Remove os acentos das palavras
 void adicionar_bibliografia(Arv23Port **Raiz, const char *filename); //Função para importar o txt e preencher a árvore 2-3 e suas subsidiarias 
 
 
@@ -59,6 +61,7 @@ void adicionar_bibliografia(Arv23Port **Raiz, const char *filename); //Função 
 
 
 //Protótipos das funções da árvore 2-3
+
 
 Arv23Port *criarNoArv23(InfArv23 Info, Arv23Port *Filho_Esq, Arv23Port *Filho_Cent); //Função de Criação do Nó da Árvore 2-3
 int ehfolha(Arv23Port *no); // Função pra verificar se é folha, 0 para não, 1 para sim
@@ -82,11 +85,27 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes); //Função que vai e
 
 //Protótipo das funções da Lista Encadeada
 int criar_no_Lista(list_unid **novo_elemento, int unidade); //Função pra criar o Nó da Lista
-int inserir_na_Lista(list_unid **Raiz, list_unid **novo_elemento); //Função para inserir na Lista a Unidade
+int inserir_na_Lista(list_unid **Raiz, int unidade); //Função para inserir na Lista a Unidade
 int buscando_unidade(list_unid *Raiz_Lista, int unidade_buscada); //Função de percorrer a Lista, em busca da unidade pesquisada. 
 int remover_unidade_lista(list_unid **Raiz_Lista, int unidade_buscada); // Função para remover a Unidade da Lista. 
 
 
+
+
+//Funcionalidades de Teste de Software
+
+
+
+void imprimirArv23(Arv23Port *no, int nivel); 
+void testeArv23(); 
+void imprimirArvBB(ArvBB_ing *no, int nivel); 
+void testeArvBB(); 
+void imprimirLista(list_unid *lista); 
+void testeLista(); 
+
+void imprimirArv23Completa(Arv23Port *no); 
+void imprimirArvBBComListas(ArvBB_ing *no, int nivel); 
+void testeIntegrado(); 
 
 
 
