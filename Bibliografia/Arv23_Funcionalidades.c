@@ -29,9 +29,9 @@ int ehfolha(Arv23Port *no) {
 }
 
 // Função para adicionar uma chave ao nó
-Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo) {
-    // Compara a nova informação com a info1 do nó
+int adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo){
     int comparacao = strcmp(Info.palavra_portugues, no->info1.palavra_portugues);
+    int operacao = 1; 
     if (comparacao < 0) {
         // Nova info é menor que info1
         no->info2 = no->info1;
@@ -40,15 +40,18 @@ Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo) {
             no->dir = no->cen;
             no->cen = MaiorNo;
         }
+        no->n_infos = 2;
+        //1, Nova palavra está em info1
     } else {
         // Nova info é maior ou igual a info1
         no->info2 = Info;
         if (MaiorNo != NULL) {
             no->dir = MaiorNo;
         }
+        no->n_infos = 2;
+        operacao = 2; // Nova palavra está em info2
     }
-    no->n_infos = 2;
-    return no;
+    return operacao; 
 }
 
 // Função para quebrar o nó
@@ -123,10 +126,10 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
                 if ((*no)->n_infos == 1) {
                     // Nó tem apenas uma informação
                     printf("Adicionando segunda chave '%s' no nó com info1='%s'\n", Info.palavra_portugues, (*no)->info1.palavra_portugues);
-                    *no = adicionaChave(*no, Info, NULL);
-                    *situacao = 1;
-                    *no_referencia = *no;
-                    *info_posicao = 2;
+                    int posicao_inserida = adicionaChave(*no, Info, NULL);
+                    *situacao = 1; // 1 indica que a palavra não existia e foi adicionada com sucesso
+                    *no_referencia = *no; // Recupera o endereço
+                    *info_posicao = posicao_inserida; // Atualiza a posição correta
                 } else {
                     // Nó tem duas informações, precisa quebrar
                     printf("Quebrando o nó. Antes da quebra, info1='%s' e info2='%s', nova info='%s'\n", (*no)->info1.palavra_portugues, (*no)->info2.palavra_portugues, Info.palavra_portugues);
@@ -164,10 +167,10 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
                 // Tratamento das pendências após as chamadas recursivas
                 if (MaiorNo != NULL) {
                     if ((*no)->n_infos == 1) {
-                        *no = adicionaChave(*no, promove_local, MaiorNo);
+                        int posicao_inserida = adicionaChave(*no, promove_local, MaiorNo);
                         *situacao = 1;
                         *no_referencia = *no;
-                        *info_posicao = 2;
+                        *info_posicao = posicao_inserida;
                     } else {
                         InfArv23 promove1;
                         MaiorNo = quebraNo(no, promove_local, &promove1, MaiorNo);
