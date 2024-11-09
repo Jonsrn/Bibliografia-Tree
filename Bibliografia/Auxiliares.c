@@ -4,18 +4,6 @@
 #include <ctype.h>
 #include "bibliografia.h"
 
-unsigned long long calcular_valor_equivalente(const char *palavra) {
-    unsigned long long valor = 0;
-    unsigned long long fator = 1;  // Fator inicial para o peso do caractere
-
-    for (int i = 0; palavra[i] != '\0'; i++) {
-        valor += (unsigned char)palavra[i] * fator;
-        fator *= 256;  // Multiplica o fator por 256 para aumentar o peso dos próximos caracteres
-    }
-
-    printf("calcular_valor_equivalente: Palavra '%s', valor equivalente %llu\n", palavra, valor);
-    return valor;
-}
 
 
 void adicionar_bibliografia(Arv23Port **Raiz, const char *filename) {
