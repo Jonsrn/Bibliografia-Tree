@@ -7,7 +7,7 @@ int main(){
    Arv23Port *palavras_portugues; 
    palavras_portugues = NULL; 
 
-   int op1, op2; 
+   int op1, op2, op3; 
 
    do{
       menu_principal(); 
@@ -18,6 +18,8 @@ int main(){
            break;
         case 1: 
             //essa função importará a bibliografia do arquivo. 
+            adicionar_bibliografia(&palavras_portugues,"bibliografia_database.txt");
+            printf("Bibliografia importada com sucesso.\n");
             break; 
         case 2: 
             do{
@@ -45,8 +47,33 @@ int main(){
                         break; 
                 }            
             }while(op2 !=0); 
-
         case 3: 
+           do{
+             testes_menu(); 
+             scanf("%d", &op3);
+             
+             switch(op3){
+                case 1: 
+                    testeArv23(); 
+                    break;
+                case 2: 
+                    testeArvBB(); 
+                    break; 
+                case 3: 
+                    testeLista(); 
+                    break; 
+                case 4: 
+                   testeIntegrado(); 
+                   break;      
+
+                default: 
+                    printf("Digite uma opção válida\n"); 
+                    break;
+
+             }
+           }while(op3 != 0);   
+
+        case 4: 
              sobre(); 
              break; 
 
