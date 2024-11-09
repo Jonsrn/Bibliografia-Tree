@@ -4,6 +4,7 @@
 #include "bibliografia.h"
 
 
+
 // funcionalidade de criação de Nó
 
 ArvBB_ing* criar_no_ArvBB(InfoBB info){
@@ -14,8 +15,9 @@ ArvBB_ing* criar_no_ArvBB(InfoBB info){
      if(novo_no == NULL){
           printf("Falha na alocação\n"); 
      }else{
+        memset(novo_no, 0, sizeof(ArvBB_ing));  //zera o lixo da memória
         strcpy(novo_no->info.palavra_ingles, info.palavra_ingles); // Copia a string 
-        novo_no->unidades = NULL; 
+        novo_no->info.unidades = NULL; 
         novo_no->esq = NULL; 
         novo_no->dir = NULL;
      }
@@ -66,6 +68,7 @@ int inserir_ArvBB_Ingles(ArvBB_ing **Raiz, InfoBB info, ArvBB_ing **no_existente
 
 }
 
+
 //Essa função percorre a ArvBB, e recupera os Nós de acordo com um dos critérios, 0 recupera tudo, !=0 recupera valores especificos 
 
 int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, int *tam_vetor){
@@ -76,7 +79,7 @@ int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, 
 
         // Se houve erro na subárvore esquerda, interrompe a operação 
         if (resultado == 1) {
-            if (unidade == 0 || buscando_unidade(Raiz->unidades, unidade) == 1) {
+            if (unidade == 0 || buscando_unidade(Raiz->info.unidades, unidade) == 1) {
                 // Realoca o vetor dinâmico
                 ArvBB_ing **temp = (ArvBB_ing **)realloc(*vetor_ingles, (*tam_vetor + 1) * sizeof(ArvBB_ing *));
                 if (temp == NULL) {
@@ -139,10 +142,10 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
                 //caso 1: O nó não tem filhos
                 if((*Raiz)->esq == NULL && (*Raiz)->dir == NULL){
                     //Antes de excluir o Nó, precisamos verificar se a lista ficará vazia. 
-                    operacao = remover_unidade_lista(&(*Raiz)->unidades, informacoes.unidade); 
+                    operacao = remover_unidade_lista(&(*Raiz)->info.unidades, informacoes.unidade); 
                     if(operacao == 1){
                          //Se a operação for 1, significa que o capitulo foi encontrado na lista e excluído de lá
-                         if((*Raiz)->unidades == NULL){
+                         if((*Raiz)->info.unidades == NULL){
                               aux = *Raiz; 
                               *Raiz = NULL; //O nó passa a ser nulo
                               free(aux); //A memória é liberada
@@ -157,10 +160,10 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
                else if((*Raiz)->esq == NULL || (*Raiz)->dir == NULL){
                     // Se o filho esquerdo é NULL, endFilho aponta para o filho direito e vice-versa 
                     //Mas antes precisamos verificar se há o capitulo na lista e se ele é único. 
-                    operacao = remover_unidade_lista(&(*Raiz)->unidades, informacoes.unidade); 
+                    operacao = remover_unidade_lista(&(*Raiz)->info.unidades, informacoes.unidade); 
                     if(operacao == 1){
                          //Se a operação for 1, significa que o capitulo foi encontrado na lista e excluído de lá
-                         if((*Raiz)->unidades == NULL){
+                         if((*Raiz)->info.unidades == NULL){
                               end_filho = (*Raiz)->esq != NULL ? (*Raiz)->esq : (*Raiz)->dir; 
                               aux = *Raiz; 
                               *Raiz = end_filho; // Substitui o nó pelo seu único filho
@@ -178,13 +181,16 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
                } //caso 3: O nó tem dois filhos
                else{
                     //Antes de realizar o procedimento, vamos verificar na lista se a unidade está lá, e se a mesma ficará vazia
-                    operacao = remover_unidade_lista(&(*Raiz)->unidades, informacoes.unidade);
+                    operacao = remover_unidade_lista(&(*Raiz)->info.unidades, informacoes.unidade);
                     
                     if(operacao == 1){
-                         if((*Raiz)->unidades == NULL){
+                         if((*Raiz)->info.unidades == NULL){
                               if(menor_filho((*Raiz)->dir, &endMenorFilho) == 1){
                                    (*Raiz)->info = endMenorFilho->info;
-                                   operacao = remover_No_ArvBB(&((*Raiz)->dir), (inf_ex){endMenorFilho->info.palavra_ingles, informacoes.unidade});
+                                   inf_ex novo_inf_ex;
+                                   strcpy(novo_inf_ex.palavra_ser_excluida, endMenorFilho->info.palavra_ingles);
+                                   novo_inf_ex.unidade = informacoes.unidade;
+                                   operacao = remover_No_ArvBB(&((*Raiz)->dir), novo_inf_ex);
                                    
 
                               }else{
