@@ -18,8 +18,22 @@ int main(){
            break;
         case 1: 
             //essa função importará a bibliografia do arquivo. 
-            adicionar_bibliografia(&palavras_portugues,"bibliografia_database.txt");
+            adicionar_bibliografia("bibliografia_database.txt", palavras_portugues);
+            inserir_palavras_no_dicionario(&palavras_portugues); 
+            //inserir_palavra_teste(&palavras_portugues); 
+
             printf("Bibliografia importada com sucesso.\n");
+
+            if(palavras_portugues == NULL){
+                printf("Continua Nulo :(\n");
+            }else{
+                printf("Nulo não tá\n"); 
+            }
+
+            
+            printf("Estrutura da Árvore 2-3:\n");
+            imprimirArv23(palavras_portugues, 0);  // Imprime a árvore
+
             break; 
         case 2: 
             do{
@@ -34,6 +48,7 @@ int main(){
                         // Imprimir todas as palavras em português seguida das suas equivalentes em inglês, de uma unidade específica
                         break; 
                     case 2: 
+                         imprimir_todos_significados_palavra_especifica(palavras_portugues); 
                         //Imprimir todas as palavras em ingles, correspondentes a palavra em português digitada
                         break; 
                     case 3: 
@@ -54,7 +69,7 @@ int main(){
              
              switch(op3){
                 case 1: 
-                    testeArv23(); 
+                    testeArv23(&palavras_portugues); 
                     break;
                 case 2: 
                     testeArvBB(); 
@@ -63,7 +78,7 @@ int main(){
                     testeLista(); 
                     break; 
                 case 4: 
-                   testeIntegrado(); 
+                   testeIntegrado(&palavras_portugues); 
                    break;      
 
                 default: 
