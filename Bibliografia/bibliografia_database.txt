@@ -1,0 +1,752 @@
+% Unidade 1
+fan: ventilador;
+protocol: protocolo;
+monitor: monitor;
+physical: fisico;
+audit: auditoria;
+user: cliente;
+log: log, registro, entrada;
+run: funcionar;
+library: biblioteca, colecao;
+backup: copia, backup, copia de seguranca;
+cooler: ventilador, refrigerador, resfriador;
+
+% Unidade 2
+network: conexao;
+bicycle: bicicleta;
+software: aplicacao, software;
+fan: fa;
+cell: celula;
+database: repositorio, banco de dados;
+mouse: rato;
+download: baixar;
+server: servidor, atendente;
+bug: falha;
+hardware: hardware;
+execute: executar, rodar;
+cooler: refrigerador, ventilador;
+run: funcionar, executar, rodar;
+system: sistema;
+code: programacao, codigo;
+file: documento, arquivo;
+
+% Unidade 3
+authorize: permitir, autorizar;
+physical: material;
+syntax: formato;
+download: baixar;
+application: aplicacao, software, programa;
+cell: unidade;
+upload: carregar, enviar;
+monitor: tela, visor, monitor;
+cloud: nuvem;
+
+% Unidade 4
+backup: backup;
+permission: licenca;
+bicycle: bicicleta, cicleta;
+run: funcionar, executar;
+restore: recuperar;
+log: log, registro;
+syntax: formato, sintaxe;
+program: software, programa;
+update: atualizar;
+algorithm: algoritmo;
+physical: material, fisico;
+folder: pasta;
+bike: bicicleta, moto;
+device: aparelho;
+encryption: encriptacao;
+bug: falha, inseto;
+cloud: nuvem, computacao em nuvem;
+table: tabela, mesa;
+authenticate: autenticar, verificar;
+fan: admirador, fa, ventilador;
+
+% Unidade 5
+execute: executar;
+encryption: encriptacao, codificacao;
+switch: interruptor, mudanca, chave;
+algorithm: algoritmo, metodo;
+platform: plataforma;
+permission: licenca, permissao;
+system: conjunto, sistema;
+program: software;
+
+% Unidade 6
+function: funcao;
+row: linha;
+fan: admirador;
+report: documento;
+update: modificar, atualizar;
+router: direcionador, roteador;
+computer: maquina, pc, computador;
+compile: converter;
+authenticate: autenticar;
+server: atendente;
+encryption: criptografia, encriptacao, codificacao;
+syntax: formato;
+physical: material, fisico;
+framework: estrutura base, framework;
+device: aparelho, dispositivo;
+file: arquivo, documento;
+
+% Unidade 7
+keyboard: teclado;
+interface: interacao;
+function: funcao, proposito;
+code: programacao, codigo;
+network: conexao;
+algorithm: metodo, algoritmo;
+permission: permissao, licenca;
+folder: diretorio;
+hardware: equipamento;
+syntax: formato, sintaxe;
+platform: base, plataforma;
+cell: celula, unidade;
+user: cliente;
+monitor: visor;
+authenticate: autenticar, verificar;
+
+% Unidade 8
+cloud: nuvem, computacao em nuvem;
+report: documento;
+bug: falha, inseto, problema;
+physical: fisico;
+server: servidor;
+bicycle: cicleta, bicicleta;
+upload: enviar;
+software: software;
+code: codigo;
+access: acesso;
+user: cliente, usuario;
+computer: computador, maquina;
+application: programa;
+file: documento, arquivo;
+
+% Unidade 9
+error: erro;
+update: atualizar, modificar;
+folder: diretorio;
+audit: auditoria;
+run: executar, rodar, funcionar;
+cooler: refrigerador, ventilador;
+protocol: norma;
+interface: interacao, interface;
+
+% Unidade 10
+application: programa, aplicacao;
+memory: memoria, lembranca, armazenamento;
+cell: unidade, celula;
+router: roteador, direcionador;
+authorize: autorizar;
+bicycle: bicicleta;
+code: codigo, programacao;
+authenticate: autenticar;
+upload: carregar;
+file: documento, arquivo;
+error: erro;
+encryption: codificacao, encriptacao, criptografia;
+platform: plataforma, base;
+backup: backup;
+resource: fonte, recurso;
+table: tabela, mesa;
+fan: fa, admirador, ventilador;
+mouse: mouse;
+computer: maquina;
+
+% Unidade 11
+permission: permissao, licenca;
+log: log;
+device: dispositivo, aparelho;
+storage: armazenamento, estoque;
+error: falha, erro;
+table: tabela;
+network: rede;
+
+% Unidade 12
+table: mesa;
+platform: plataforma, base;
+interface: interacao, interface;
+processor: processador;
+authenticate: autenticar, verificar;
+encryption: encriptacao;
+program: programa, software;
+algorithm: algoritmo;
+report: documento;
+update: modificar, atualizar;
+bug: falha, inseto, problema;
+cell: celula, unidade;
+bicycle: cicleta;
+database: banco de dados;
+audit: auditoria;
+router: roteador, direcionador;
+column: coluna, campo;
+bus: onibus, barramento, via, rota;
+
+% Unidade 13
+physical: fisico;
+bus: onibus;
+file: arquivo;
+code: codigo;
+application: programa, aplicacao;
+device: dispositivo;
+execute: rodar, executar;
+hardware: equipamento;
+encryption: criptografia, codificacao;
+authorize: permitir;
+restore: restaurar, recuperar;
+user: cliente;
+access: acesso;
+
+% Unidade 14
+database: banco de dados, repositorio;
+virtual: digital;
+bicycle: cicleta, bicicleta;
+protocol: protocolo, norma;
+bus: barramento, via;
+file: documento, arquivo;
+
+% Unidade 15
+authorize: permitir;
+table: tabela;
+bicycle: bicicleta, cicleta;
+memory: armazenamento, lembranca;
+network: conexao, rede;
+column: coluna;
+syntax: sintaxe, formato;
+backup: copia de seguranca, copia, backup;
+update: atualizar;
+restore: restaurar;
+device: aparelho, dispositivo;
+application: aplicacao;
+fan: admirador, fa, ventilador;
+system: conjunto, sistema;
+
+% Unidade 16
+mouse: rato;
+program: software;
+processor: processador, cpu;
+cell: unidade, celula;
+hardware: equipamento;
+memory: memoria, armazenamento;
+download: transferir;
+protocol: protocolo;
+permission: licenca, permissao;
+folder: diretorio, pasta;
+report: documento, relatorio;
+bus: onibus;
+software: aplicacao;
+
+% Unidade 17
+program: software, programa;
+fan: admirador;
+compile: compilar;
+application: software, aplicacao, programa;
+authenticate: verificar, autenticar;
+report: documento, relatorio;
+virtual: digital;
+mouse: rato;
+router: roteador;
+file: documento;
+framework: estrutura base, estrutura, framework;
+resource: fonte, recurso;
+function: proposito;
+protocol: protocolo;
+switch: mudanca;
+algorithm: metodo;
+database: repositorio, banco de dados;
+upload: enviar, carregar;
+code: codigo, programacao;
+audit: auditoria, checagem;
+
+% Unidade 18
+device: aparelho, dispositivo;
+algorithm: algoritmo, metodo;
+application: software;
+protocol: protocolo;
+encryption: encriptacao, codificacao;
+hardware: equipamento;
+cell: celula, unidade;
+download: transferir, baixar;
+
+% Unidade 19
+algorithm: algoritmo, metodo;
+debug: correcao, depurar, debug;
+cell: celula, unidade;
+column: campo, coluna;
+database: banco de dados;
+execute: executar, rodar;
+system: sistema;
+bug: falha;
+download: transferir, baixar;
+table: mesa, tabela;
+folder: diretorio;
+update: atualizar;
+permission: permissao;
+storage: estoque, armazenamento;
+authorize: permitir;
+restore: restaurar, recuperar;
+log: registro, log;
+backup: backup;
+compile: converter;
+program: programa, software;
+
+% Unidade 20
+processor: processador, cpu;
+fan: ventilador, fa;
+restore: restaurar;
+physical: material;
+run: executar, rodar;
+table: tabela, mesa;
+access: entrada;
+authenticate: autenticar;
+server: servidor;
+router: roteador, direcionador;
+program: programa;
+column: campo;
+bike: bicicleta, moto;
+error: falha;
+function: funcao, proposito;
+folder: diretorio;
+
+% Unidade 21
+debug: correcao, debug;
+protocol: norma;
+physical: material;
+upload: carregar;
+backup: backup;
+virtual: digital;
+monitor: tela, monitor, visor;
+audit: auditoria, checagem;
+framework: framework, estrutura;
+application: software, programa, aplicacao;
+admin: administrador, gestor;
+program: programa;
+permission: permissao, licenca;
+update: modificar;
+function: funcao;
+run: executar, rodar, funcionar;
+mouse: mouse, rato;
+authenticate: autenticar;
+
+% Unidade 22
+computer: pc;
+syntax: sintaxe;
+code: programacao, codigo;
+bicycle: cicleta;
+audit: auditoria, checagem;
+program: programa, software;
+
+% Unidade 23
+permission: licenca;
+cell: celula, unidade;
+framework: estrutura base;
+log: registro;
+interface: interacao;
+storage: armazenamento, estoque;
+execute: executar;
+device: aparelho;
+upload: enviar, carregar;
+database: repositorio, banco de dados;
+network: rede;
+
+% Unidade 24
+admin: administrador, gestor;
+permission: permissao, licenca;
+code: programacao;
+server: atendente, servidor;
+memory: armazenamento, memoria, lembranca;
+program: software;
+framework: estrutura, framework, estrutura base;
+update: atualizar, modificar;
+mouse: rato, mouse;
+error: erro;
+
+% Unidade 25
+router: direcionador;
+bug: problema;
+server: atendente;
+column: campo, coluna;
+function: proposito, funcao;
+log: entrada;
+network: rede, conexao;
+syntax: sintaxe, formato;
+cell: unidade, celula;
+report: documento;
+platform: base;
+monitor: monitor, tela, visor;
+user: usuario;
+resource: fonte;
+database: banco de dados, repositorio;
+row: fileira, linha;
+
+% Unidade 26
+download: transferir;
+backup: backup;
+bike: moto, bicicleta;
+cooler: refrigerador;
+execute: executar, rodar;
+column: coluna, campo;
+authenticate: autenticar;
+monitor: monitor, tela, visor;
+code: programacao, codigo;
+cloud: nuvem, computacao em nuvem;
+server: servidor, atendente;
+device: dispositivo;
+mouse: rato, mouse;
+row: fileira, linha;
+syntax: sintaxe;
+bus: barramento, via, rota, onibus;
+
+% Unidade 27
+backup: backup;
+mouse: rato, mouse;
+system: sistema, conjunto;
+authenticate: verificar;
+bug: falha, inseto, problema;
+report: relatorio;
+physical: fisico;
+software: software;
+syntax: sintaxe;
+program: software, programa;
+audit: checagem, auditoria;
+storage: estoque, armazenamento;
+
+% Unidade 28
+compile: compilar, converter;
+device: dispositivo;
+encryption: criptografia, codificacao;
+interface: interface, interacao;
+software: software;
+cloud: nuvem;
+system: sistema;
+run: funcionar;
+fan: ventilador, admirador;
+code: programacao;
+update: modificar;
+
+% Unidade 29
+restore: restaurar;
+algorithm: algoritmo, metodo;
+library: biblioteca, colecao;
+cloud: computacao em nuvem;
+program: programa, software;
+database: banco de dados, repositorio;
+system: conjunto, sistema;
+compile: compilar;
+function: funcao;
+update: atualizar;
+row: linha, fileira;
+interface: interface;
+authorize: permitir, autorizar;
+
+% Unidade 30
+protocol: protocolo;
+application: programa;
+bug: falha;
+update: modificar;
+compile: converter;
+log: entrada, registro, log;
+processor: cpu;
+storage: estoque;
+keyboard: controlador, teclado;
+monitor: visor;
+run: executar, funcionar;
+software: aplicacao, software;
+mouse: rato;
+table: mesa, tabela;
+bicycle: bicicleta, cicleta;
+server: atendente;
+program: programa;
+virtual: virtual;
+authorize: autorizar, permitir;
+bike: bicicleta, moto;
+
+% Unidade 31
+authenticate: autenticar, verificar;
+mouse: mouse;
+cloud: computacao em nuvem, nuvem;
+switch: mudanca, chave, interruptor;
+run: funcionar, executar, rodar;
+download: baixar, transferir;
+fan: admirador;
+access: acesso, entrada;
+interface: interface, interacao;
+router: direcionador, roteador;
+system: conjunto, sistema;
+bus: via, onibus;
+report: documento;
+bike: bicicleta;
+bicycle: cicleta, bicicleta;
+code: programacao, codigo;
+audit: auditoria;
+compile: compilar;
+application: aplicacao, programa;
+network: conexao;
+
+% Unidade 32
+report: relatorio;
+database: repositorio;
+table: mesa;
+switch: chave, interruptor;
+admin: gestor;
+physical: material;
+authorize: autorizar, permitir;
+computer: pc;
+network: conexao;
+cloud: nuvem, computacao em nuvem;
+bicycle: bicicleta;
+program: programa;
+code: codigo;
+cell: celula, unidade;
+storage: armazenamento, estoque;
+
+% Unidade 33
+cooler: ventilador;
+error: erro, falha;
+software: software;
+download: transferir;
+keyboard: controlador, teclado;
+authenticate: verificar;
+database: repositorio, banco de dados;
+compile: converter;
+bicycle: cicleta, bicicleta;
+virtual: virtual, digital;
+
+% Unidade 34
+library: colecao, biblioteca;
+report: relatorio;
+resource: recurso;
+column: campo, coluna;
+log: log;
+physical: material, fisico;
+keyboard: teclado, controlador;
+fan: fa, admirador, ventilador;
+device: aparelho, dispositivo;
+switch: mudanca, interruptor, chave;
+bug: problema, falha, inseto;
+error: falha, erro;
+upload: enviar, carregar;
+memory: lembranca, memoria;
+bicycle: bicicleta, cicleta;
+run: rodar, funcionar;
+cloud: nuvem, computacao em nuvem;
+database: repositorio;
+
+% Unidade 35
+framework: estrutura base, estrutura;
+software: software;
+bike: bicicleta;
+encryption: codificacao, encriptacao;
+server: servidor, atendente;
+network: conexao;
+router: direcionador;
+database: banco de dados, repositorio;
+syntax: sintaxe;
+library: colecao;
+fan: fa, admirador;
+system: sistema, conjunto;
+virtual: digital;
+restore: restaurar;
+computer: pc, computador, maquina;
+
+% Unidade 36
+mouse: rato, mouse;
+run: executar, rodar, funcionar;
+error: erro, falha;
+file: documento, arquivo;
+folder: pasta, diretorio;
+update: atualizar, modificar;
+audit: checagem, auditoria;
+library: biblioteca;
+function: funcao, proposito;
+memory: armazenamento, memoria;
+keyboard: controlador, teclado;
+protocol: protocolo;
+device: aparelho, dispositivo;
+
+% Unidade 37
+memory: armazenamento, lembranca;
+admin: administrador;
+hardware: hardware, equipamento;
+audit: checagem, auditoria;
+restore: recuperar;
+log: log;
+execute: executar;
+column: coluna, campo;
+permission: licenca;
+keyboard: controlador, teclado;
+
+% Unidade 38
+file: documento, arquivo;
+switch: mudanca;
+log: log, registro;
+user: usuario;
+bus: onibus, barramento;
+processor: processador;
+bike: moto;
+authorize: autorizar, permitir;
+report: documento;
+
+% Unidade 39
+application: software, aplicacao, programa;
+restore: restaurar;
+processor: cpu;
+computer: computador, pc;
+upload: carregar;
+library: biblioteca;
+
+% Unidade 40
+processor: cpu, processador;
+interface: interface, interacao;
+software: software;
+column: campo, coluna;
+audit: checagem;
+application: aplicacao, programa, software;
+device: dispositivo, aparelho;
+file: documento;
+debug: correcao, debug;
+run: rodar, executar;
+cloud: computacao em nuvem;
+report: relatorio, documento;
+error: falha;
+keyboard: controlador, teclado;
+authorize: permitir;
+function: proposito;
+upload: carregar, enviar;
+authenticate: autenticar;
+
+% Unidade 41
+server: atendente, servidor;
+framework: estrutura base;
+bicycle: cicleta;
+protocol: norma;
+router: direcionador, roteador;
+execute: executar, rodar;
+
+% Unidade 42
+platform: base;
+function: funcao;
+keyboard: controlador;
+error: falha, erro;
+bike: moto, bicicleta;
+log: registro;
+mouse: rato, mouse;
+software: aplicacao, software;
+restore: restaurar;
+admin: gestor;
+program: software;
+resource: fonte, recurso;
+router: direcionador, roteador;
+
+% Unidade 43
+bicycle: cicleta, bicicleta;
+restore: recuperar;
+cell: unidade;
+compile: converter;
+storage: estoque, armazenamento;
+application: programa, software;
+authenticate: autenticar;
+debug: depurar, correcao;
+admin: gestor;
+monitor: monitor, visor;
+
+% Unidade 44
+bus: onibus, rota, via;
+cooler: resfriador, refrigerador, ventilador;
+cell: unidade, celula;
+run: rodar, executar;
+bug: problema, inseto, falha;
+restore: restaurar, recuperar;
+
+% Unidade 45
+device: dispositivo, aparelho;
+cell: celula;
+program: software, programa;
+bus: onibus, via, rota, barramento;
+run: executar;
+physical: fisico;
+restore: recuperar;
+router: direcionador;
+memory: lembranca;
+cooler: refrigerador, resfriador;
+hardware: hardware, equipamento;
+column: coluna, campo;
+bug: falha, problema;
+function: funcao;
+
+% Unidade 46
+authenticate: verificar, autenticar;
+code: programacao, codigo;
+compile: converter;
+row: fileira;
+switch: mudanca, interruptor;
+storage: armazenamento, estoque;
+run: funcionar, rodar, executar;
+admin: administrador;
+download: transferir, baixar;
+bicycle: cicleta, bicicleta;
+algorithm: algoritmo, metodo;
+bug: problema, falha;
+access: entrada, acesso;
+cloud: computacao em nuvem, nuvem;
+update: atualizar;
+
+% Unidade 47
+storage: armazenamento;
+encryption: encriptacao, criptografia, codificacao;
+log: log, registro;
+table: tabela;
+resource: fonte, recurso;
+
+% Unidade 48
+execute: rodar;
+log: log;
+authenticate: autenticar, verificar;
+bug: falha, problema;
+device: dispositivo;
+update: modificar;
+cooler: refrigerador, ventilador;
+admin: administrador;
+keyboard: controlador;
+bike: moto, bicicleta;
+physical: fisico;
+table: tabela, mesa;
+error: erro;
+syntax: sintaxe, formato;
+system: conjunto, sistema;
+interface: interacao;
+
+% Unidade 49
+bus: via, barramento, onibus, rota;
+processor: cpu, processador;
+update: atualizar;
+debug: correcao;
+admin: gestor;
+download: transferir;
+audit: checagem;
+program: software, programa;
+interface: interface;
+upload: carregar, enviar;
+authorize: autorizar, permitir;
+hardware: equipamento;
+cooler: refrigerador, ventilador, resfriador;
+virtual: digital;
+database: repositorio;
+file: arquivo, documento;
+algorithm: metodo;
+
+% Unidade 50
+keyboard: controlador;
+application: aplicacao;
+protocol: protocolo, norma;
+restore: recuperar;
+physical: fisico, material;
+system: sistema;
+compile: converter;
+download: baixar;
+admin: gestor, administrador;
+update: modificar, atualizar;
+fan: admirador, fa, ventilador;
+
