@@ -54,8 +54,11 @@ void realizar_atividades();
 void testes_menu(); 
 
 //Protótipo das Funções auxiliares
-void adicionar_bibliografia(Arv23Port **Raiz, const char *filename); //Função para importar o txt e preencher a árvore 2-3 e suas subsidiarias 
-
+void adicionar_bibliografia(const char *filename, Arv23Port *Raiz);  //Função para importar o txt e preencher a árvore 2-3 e suas subsidiarias 
+void inserir_palavras_no_dicionario(Arv23Port **Raiz); 
+void imprimirArv23(Arv23Port *no, int nivel); 
+void inserir_palavra_teste(Arv23Port **Raiz);  
+void imprimir_todos_significados_palavra_especifica(Arv23Port *Raiz); //Função do Item II
 
 
 
@@ -65,11 +68,14 @@ void adicionar_bibliografia(Arv23Port **Raiz, const char *filename); //Função 
 
 Arv23Port *criarNoArv23(InfArv23 Info, Arv23Port *Filho_Esq, Arv23Port *Filho_Cent); //Função de Criação do Nó da Árvore 2-3
 int ehfolha(Arv23Port *no); // Função pra verificar se é folha, 0 para não, 1 para sim
-int adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); 
+//int adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); 
+Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); 
 //Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); //Função que adiciona a Info em um Nó que possui espaço. 
-Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho); // Função responsável por quebrar o Nó já cheio. 
+//Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho); // Função responsável por quebrar o Nó já cheio. 
 Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao, int *info_posicao, Arv23Port **no_referencia); //Função de Inserção na Árvore 2-3 de palavra em portugues 
-
+Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho, Arv23Port **no_referencia); 
+//Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao, Arv23Port **no_referencia);  
+int armazenar_No_ARV23(Arv23Port *Raiz, InfArv23 Info, Arv23Port **No_recuperado); //Essa função percorre a árvore 2-3 e recupera seu Nó
 
 
 
@@ -104,9 +110,10 @@ void testeArvBB();
 void imprimirLista(list_unid *lista); 
 void testeLista(); 
 
+
 void imprimirArv23Completa(Arv23Port *no); 
 void imprimirArvBBComListas(ArvBB_ing *no, int nivel); 
-void testeIntegrado(); 
+void testeIntegrado(Arv23Port **raiz_arv23); 
 
 
 
