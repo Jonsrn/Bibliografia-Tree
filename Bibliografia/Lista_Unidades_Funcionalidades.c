@@ -38,6 +38,8 @@ int inserir_na_Lista(list_unid **Raiz, int unidade) {
         if(operacao == 1){
             novo_elemento->prox = *Raiz;
             *Raiz = novo_elemento;
+        }else{
+            operacao = 0; 
         }    
     } else {
         // Percorre a lista para encontrar a posição correta de inserção
@@ -48,7 +50,7 @@ int inserir_na_Lista(list_unid **Raiz, int unidade) {
 
         // Verifica se a unidade já existe na lista
         if (atual != NULL && atual->unidade == unidade) {
-            operacao = 0; // Unidade já existe, não insere
+            operacao = 2; // Unidade já existe, não insere
         } else {
             // Insere o novo elemento na posição encontrada
             operacao = criar_no_Lista(&novo_elemento, unidade);
