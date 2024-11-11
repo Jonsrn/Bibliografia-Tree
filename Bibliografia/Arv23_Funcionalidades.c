@@ -29,9 +29,8 @@ int ehfolha(Arv23Port *no) {
 }
 
 // Função para adicionar uma chave ao nó
-int adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo){
+Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo) {
     int comparacao = strcmp(Info.palavra_portugues, no->info1.palavra_portugues);
-    int operacao = 1; 
     if (comparacao < 0) {
         // Nova info é menor que info1
         no->info2 = no->info1;
@@ -41,7 +40,6 @@ int adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo){
             no->cen = MaiorNo;
         }
         no->n_infos = 2;
-        //1, Nova palavra está em info1
     } else {
         // Nova info é maior ou igual a info1
         no->info2 = Info;
@@ -49,13 +47,16 @@ int adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo){
             no->dir = MaiorNo;
         }
         no->n_infos = 2;
-        operacao = 2; // Nova palavra está em info2
     }
-    return operacao; 
+    return no; // Retorna o nó atualizado em vez de um inteiro
 }
+// Função para quebrar o nó com indicação de raiz
+
+
+
 
 // Função para quebrar o nó
-Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho) {
+Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho, Arv23Port **no_referencia) {
     int comparacao1 = strcmp(Info.palavra_portugues, (*No)->info2.palavra_portugues);
     int comparacao2 = strcmp(Info.palavra_portugues, (*No)->info1.palavra_portugues);
     Arv23Port *Maior;
@@ -64,16 +65,19 @@ Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port 
         // Caso 1: Info > info2
         *promove = (*No)->info2;
         Maior = criarNoArv23(Info, (*No)->dir, Filho);
+        *no_referencia = Maior; 
     } else if (comparacao2 > 0) {
         // Caso 2: info1 < Info < info2
         *promove = Info;
         Maior = criarNoArv23((*No)->info2, Filho, (*No)->dir);
+        *no_referencia = Maior;
     } else {
         // Caso 3: Info < info1
         *promove = (*No)->info1;
         Maior = criarNoArv23((*No)->info2, (*No)->cen, (*No)->dir);
         (*No)->info1 = Info;
         (*No)->cen = Filho;
+        *no_referencia = *No; 
     }
 
     // Atualiza o nó atual
@@ -84,6 +88,9 @@ Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port 
     return Maior;
 }
 
+
+
+
 // Função de inserção na árvore 2-3
 Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao, int *info_posicao, Arv23Port **no_referencia) {
     Arv23Port *MaiorNo = NULL;
@@ -92,7 +99,7 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
     int verificacao = 0; // 0 significa que não tem palavra igual na árvore
 
     if (*no == NULL) {
-        // Se a árvore for Nula, criaremos o primeiro Nó
+        // Se a árvore for nula, criaremos o primeiro nó
         *no = criarNoArv23(Info, NULL, NULL);
         if (*no == NULL) {
             *situacao = 0; // Falha total devido à falha de alocação
@@ -126,15 +133,17 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
                 if ((*no)->n_infos == 1) {
                     // Nó tem apenas uma informação
                     printf("Adicionando segunda chave '%s' no nó com info1='%s'\n", Info.palavra_portugues, (*no)->info1.palavra_portugues);
-                    int posicao_inserida = adicionaChave(*no, Info, NULL);
-                    *situacao = 1; // 1 indica que a palavra não existia e foi adicionada com sucesso
+                    *no = adicionaChave(*no, Info, NULL); // Retorna o nó atualizado
+                    *situacao = 1; // Indica que a palavra foi adicionada com sucesso
                     *no_referencia = *no; // Recupera o endereço
-                    *info_posicao = posicao_inserida; // Atualiza a posição correta
+                    *info_posicao = 1; // Atualiza a posição correta
+                    MaiorNo = NULL;
                 } else {
                     // Nó tem duas informações, precisa quebrar
                     printf("Quebrando o nó. Antes da quebra, info1='%s' e info2='%s', nova info='%s'\n", (*no)->info1.palavra_portugues, (*no)->info2.palavra_portugues, Info.palavra_portugues);
-                    MaiorNo = quebraNo(no, Info, &promove_local, NULL);
+                    MaiorNo = quebraNo(no, Info, &promove_local, NULL, no_referencia);
                     if (Pai == NULL || *Pai == NULL) {
+                        // Criação de uma nova raiz
                         *no = criarNoArv23(promove_local, *no, MaiorNo);
                         MaiorNo = NULL;
                         *info_posicao = 1;
@@ -167,14 +176,18 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
                 // Tratamento das pendências após as chamadas recursivas
                 if (MaiorNo != NULL) {
                     if ((*no)->n_infos == 1) {
-                        int posicao_inserida = adicionaChave(*no, promove_local, MaiorNo);
+                        // Adiciona o valor promovido ao nó
+                        *no = adicionaChave(*no, promove_local, MaiorNo); // Retorna o nó atualizado
                         *situacao = 1;
                         *no_referencia = *no;
-                        *info_posicao = posicao_inserida;
+                        *info_posicao = 1;
+                        MaiorNo = NULL;
                     } else {
+                        // Quebra o nó atual e promove o valor
                         InfArv23 promove1;
-                        MaiorNo = quebraNo(no, promove_local, &promove1, MaiorNo);
+                        MaiorNo = quebraNo(no, promove_local, &promove1, MaiorNo, no_referencia);
                         if (Pai == NULL || *Pai == NULL) {
+                            // Criação de uma nova raiz
                             *no = criarNoArv23(promove1, *no, MaiorNo);
                             MaiorNo = NULL;
                             *info_posicao = 1;
@@ -192,4 +205,128 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
     }
 
     return MaiorNo;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int armazenar_No_ARV23(Arv23Port *Raiz, InfArv23 Info, Arv23Port **No_recuperado){
+   int resultado, comparacao1, comparacao2; 
+   resultado = 0; //0 significa que não encontrou
+
+   if(Raiz != NULL){
+       resultado = armazenar_No_ARV23(Raiz->esq, Info, No_recuperado); 
+       comparacao1 = strcmp(Info.palavra_portugues, Raiz->info1.palavra_portugues); 
+
+       if(resultado == 0){
+
+            if(Raiz->n_infos == 1){
+                if(comparacao1 == 0){
+                        //encontrou, então recuperamos o Nó e recebe 1 (pq está na info1)
+                        resultado= 1; 
+                        *No_recuperado = Raiz; 
+                } 
+
+                if(resultado != 1){
+                    // como não encontrou, vamos pro centro
+                    resultado = armazenar_No_ARV23(Raiz->cen, Info, No_recuperado);   
+
+                }
+                //tem que comparar a info1 
+                // caso não encontre, mandar pro centro
+
+            }else{
+                //tem que comparar a info e a info 2
+                //caso não encontre, mandar pro centro e pra direita
+                comparacao2 = strcmp(Info.palavra_portugues, Raiz->info2.palavra_portugues); 
+
+                if(comparacao1 == 0 || comparacao2 == 0){
+                    //encontramos, resta saber em qual das infos
+                    if(comparacao1 == 0){
+                            //recupera o nó e recebe 1 (está na info1)
+                            resultado = 1; 
+                            *No_recuperado = Raiz; 
+                    }else{
+                            //recupera o Nó e recebe 2 (está na info2)
+                            resultado = 2; 
+                            *No_recuperado = Raiz; 
+                    }
+                    
+
+                }else{
+                    //não encontrou, devemos percorrer
+                    resultado = armazenar_No_ARV23(Raiz->cen, Info, No_recuperado); 
+
+                    //caso não encontre no centro, deve buscar na direita
+
+                    if(resultado == 0){
+                        //Como não foi encontrado nem na esquerda, no atual, e nem no centro, resta ir pra direita
+                        resultado = armazenar_No_ARV23(Raiz->dir, Info, No_recuperado); 
+                
+                    } 
+
+                }
+
+
+         }
+    }   
+}
+
+   return resultado;  
+
+
+
 }
