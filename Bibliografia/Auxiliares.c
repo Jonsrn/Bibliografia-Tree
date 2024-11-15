@@ -143,7 +143,7 @@ int inserir_Arv23_Automatico(Arv23Port **Raiz, InfArv23 Info, int unidade, InfoB
 } 
 
 
-
+//Função de debug, ela vai sumir em breve. 
 void inserir_palavra_teste(Arv23Port **Raiz) {
     InfArv23 info_port;
     InfoBB info_ing;
@@ -180,19 +180,18 @@ void inserir_palavra_teste(Arv23Port **Raiz) {
 
 // Função para inserir as palavras do vetor na árvore 2-3 e nas subestruturas associadas
 void inserir_palavras_no_dicionario(Arv23Port **Raiz) {
-    if(*Raiz == NULL){
-    
+    if (*Raiz == NULL) {
         for (int i = 0; i < contador_palavras; i++) {
-            // Obtém a palavra em inglês e suas traduções
-            InfoBB info_ing;
-            strncpy(info_ing.palavra_ingles, palavras_importadas[i].palavra_ingles, sizeof(info_ing.palavra_ingles) - 1);
-            info_ing.palavra_ingles[sizeof(info_ing.palavra_ingles) - 1] = '\0';
-            info_ing.unidades = NULL; // Inicializa a lista de unidades
-
             int unidade = palavras_importadas[i].unidade; // Unidade atual associada
 
-            // Para cada tradução, insere na árvore 2-3
             for (int j = 0; j < palavras_importadas[i].num_traducoes; j++) {
+                // Obtém a palavra em inglês e suas traduções
+                InfoBB info_ing;
+                strncpy(info_ing.palavra_ingles, palavras_importadas[i].palavra_ingles, sizeof(info_ing.palavra_ingles) - 1);
+                info_ing.palavra_ingles[sizeof(info_ing.palavra_ingles) - 1] = '\0';
+                info_ing.unidades = NULL; // Inicializa a lista de unidades
+
+                // Define a palavra em português
                 InfArv23 info_port;
                 strncpy(info_port.palavra_portugues, palavras_importadas[i].palavras_portugues[j], sizeof(info_port.palavra_portugues) - 1);
                 info_port.palavra_portugues[sizeof(info_port.palavra_portugues) - 1] = '\0';
@@ -203,25 +202,52 @@ void inserir_palavras_no_dicionario(Arv23Port **Raiz) {
 
                 if (resultado == 0) {
                     printf("Erro ao inserir a palavra '%s' (significado em inglês: '%s') na árvore 2-3.\n",
-                        info_port.palavra_portugues, info_ing.palavra_ingles);
+                           info_port.palavra_portugues, info_ing.palavra_ingles);
                 }
             }
         }
-    }else{
-        printf("Dataset já preenchido\n"); 
-    }    
-
-    
+    } else {
+        printf("Dataset já preenchido\n");
+    }
 }
+
 
 
 //Funções dos Itens agr
 
 //Item (I)  informar uma unidade e então imprima todas as palavras da unidade em português seguida das equivalentes em inglês;
 
+void imprimir_palavras_pela_unidade(Arv23Port *Raiz){
+    if(Raiz != NULL){
+        int confirmacao, unidade; 
+        confirmacao = 0; 
+        //primeiro passo é digitar a unidade, como o dataset é fixo (50), vamos limitar por essa quantidade
+        do{
+           
+           printf("Digite a unidade do dataset que deseja imprimir: ");
+           scanf("%d", &unidade); 
+           if(unidade > 0 && unidade < 51){
+               confirmacao = 1; 
+           }else{
+               printf("Digite uma unidade válida (Entre 1 e 50)\n"); 
+           }
+        }while(confirmacao == 0); 
+
+        //proximo passo é chamar uma função pra percorrer a árvore 2-3 
+        //Dessa vez é melhor fazer tudo lá em Arv2-3 Funcionalidades; 
+
+        imprimir_infos_23_por_unidade(Raiz, unidade); 
+
+
+    }else{
+        printf("A árvore está vazia\n");
+    }
+}
+
+
+
+
 //Item (II) informar uma palavra em português e então imprima todas as palavras em inglês equivalente a palavra em português dada, independente da unidade; 
-
-
 void imprimir_todos_significados_palavra_especifica(Arv23Port *Raiz){
     if(Raiz != NULL){
        InfArv23 Informacao; 
@@ -257,24 +283,52 @@ void imprimir_todos_significados_palavra_especifica(Arv23Port *Raiz){
         printf("A árvore está vazia\n"); 
     }
 } 
+/*
+Item (III) Excluir palavra em ingles, de determinada unidade
+Como vai funcionar, temos a palavra em inglês e sua respectiva unidade (ou seja, ambas tem que corresponder, pra que a exclusão seja feita)
+uma palavra em inglês pode estar em mais de uma unidade(baseado no meu dataset), então partiremos de uma lógica de reversão em cascata
+como não sabemos onde exatamente essa palavra em ingles está, devemos percorrer todas as infos da arvore 2-3
+Em cada Info da 2-3, vamos percorrer todos os nós da árvore binária, ao encontrar a palavra correspondente
+vamos mandar remover a unidade da lista, caso a unidade removida seja a única naquela lista, tornando-a nula
+faremos a remoção definitiva do nome do dataset, com a remoção do Nó, caso a subárvore então fique NULA
+faremos a exclusão da palavra em português da 2-3
+
+*/
+
+void excluir_palavra_ingles_unidade(Arv23Port **Raiz){
+   if(*Raiz != NULL){
+       inf_ex Informacao;    
+       int confirmacao, unidade, operacao; 
+       confirmacao = 0; 
+
+       while (getchar() != '\n');
+       
+       printf("Digite a palavra em ingles que deseja excluir: ");
+       fgets(Informacao.palavra_ser_excluida, 100, stdin);
+       Informacao.palavra_ser_excluida[strcspn(Informacao.palavra_ser_excluida, "\n")] = '\0';  
+
+       do{
+         printf("Digite a unidade: "); 
+         scanf("%d", &Informacao.unidade); 
+         if(unidade > 0 && unidade < 50){
+            confirmacao = 1;
+            
+         }else{
+            printf("Digite uma unidade válida(Entre 1 e 50)\n"); 
+         }
+
+
+       }while(confirmacao == 0); 
 
 
 
+       //Já temos as informações, agr é chamar a função de exclusão da 2-3
 
+   }else{
+       printf("A raiz está vazia\n"); 
+   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 
