@@ -46,6 +46,7 @@ int main(){
                     
                     case 1: 
                         // Imprimir todas as palavras em português seguida das suas equivalentes em inglês, de uma unidade específica
+                        imprimir_palavras_pela_unidade(palavras_portugues);
                         break; 
                     case 2: 
                          imprimir_todos_significados_palavra_especifica(palavras_portugues); 
@@ -53,21 +54,26 @@ int main(){
                         break; 
                     case 3: 
                         // Remover palavra em inglês, informando a palavra em inglês e a unidade na qual ela pertence
+                        excluir_palavra_ingles_unidade(&palavras_portugues); 
                         break; 
                     case 4:    
-                        //Adicionar a descrição posteriormente.          
+                        excluir_palavras_correspondentes_ingles(&palavras_portugues);    
                         break; 
                     default: 
                         printf("Digite uma opção válida\n");
                         break; 
                 }            
             }while(op2 !=0); 
+
+            break; 
         case 3: 
            do{
              testes_menu(); 
              scanf("%d", &op3);
              
              switch(op3){
+                case 0: 
+                   break; 
                 case 1: 
                     testeArv23(&palavras_portugues); 
                     break;
@@ -87,6 +93,8 @@ int main(){
 
              }
            }while(op3 != 0);   
+
+           break; 
 
         case 4: 
              sobre(); 

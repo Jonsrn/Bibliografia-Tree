@@ -216,6 +216,35 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
 }
 
 
+void percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_ex Info){
+     if(Raiz_percorrendo != NULL){
+        int resultado; 
+
+        percorrer_remover_palavras_pela_unidade(Raiz_percorrendo->esq, Raiz_original, Info);
+        
+        percorrer_remover_palavras_pela_unidade(Raiz_percorrendo->dir, Raiz_original, Info); 
+
+        inf_ex Informacao;
+        Informacao.unidade = Info.unidade; 
+        strcpy(Informacao.palavra_ser_excluida, Raiz_percorrendo->info.palavra_ingles);
+        
+        resultado = buscando_unidade(Raiz_percorrendo->info.unidades, Info.unidade); 
+
+        if(resultado == 1){
+          remover_No_ArvBB(Raiz_original, Informacao);
+
+          if(Raiz_percorrendo->info.unidades == NULL){
+             printf("Como não há mais unidades utilizando essa palavra, ela foi removida\n");    
+            }
+
+        }
+
+
+        
+
+     }
+}
+
 
 
 
