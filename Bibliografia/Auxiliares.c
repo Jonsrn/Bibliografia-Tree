@@ -25,7 +25,8 @@ void imprimiArvBB(ArvBB_ing *no) {
         imprimiArvBB(no->esq);
 
 
-        printf("%s\n", no->info.palavra_ingles);
+        printf("\nPalavra em inglês: %s, Unidades que ela está presente: \n", no->info.palavra_ingles);
+        imprimirLista(no->info.unidades);
 
         imprimiArvBB(no->dir);
     }
@@ -250,7 +251,7 @@ void imprimir_palavras_pela_unidade(Arv23Port *Raiz){
 //Item (II) informar uma palavra em português e então imprima todas as palavras em inglês equivalente a palavra em português dada, independente da unidade; 
 void imprimir_todos_significados_palavra_especifica(Arv23Port *Raiz){
     if(Raiz != NULL){
-       InfArv23 Informacao; 
+       inf_ex Informacao; 
        int situacao; 
 
        Arv23Port *No_recuperado; 
@@ -259,8 +260,8 @@ void imprimir_todos_significados_palavra_especifica(Arv23Port *Raiz){
        while (getchar() != '\n');
        
        printf("Digite a palavra em português que deseja imprimir seus significados: ");
-       fgets(Informacao.palavra_portugues, 100, stdin);
-       Informacao.palavra_portugues[strcspn(Informacao.palavra_portugues, "\n")] = '\0';  
+       fgets(Informacao.palavra_ser_excluida, 100, stdin);
+       Informacao.palavra_ser_excluida[strcspn(Informacao.palavra_ser_excluida, "\n")] = '\0';  
 
        situacao = armazenar_No_ARV23(Raiz, Informacao, &No_recuperado); 
 
@@ -295,42 +296,93 @@ faremos a exclusão da palavra em português da 2-3
 
 */
 
-void excluir_palavra_ingles_unidade(Arv23Port **Raiz){
-   if(*Raiz != NULL){
+void excluir_palavra_ingles_unidade(Arv23Port **Raiz) {
+   if (*Raiz != NULL) {
        inf_ex Informacao;    
-       int confirmacao, unidade, operacao; 
-       confirmacao = 0; 
+       int confirmacao = 0;
 
+       
        while (getchar() != '\n');
        
-       printf("Digite a palavra em ingles que deseja excluir: ");
+       printf("Digite a palavra em inglês que deseja excluir: ");
        fgets(Informacao.palavra_ser_excluida, 100, stdin);
-       Informacao.palavra_ser_excluida[strcspn(Informacao.palavra_ser_excluida, "\n")] = '\0';  
+       Informacao.palavra_ser_excluida[strcspn(Informacao.palavra_ser_excluida, "\n")] = '\0';
 
-       do{
+      
+       do {
          printf("Digite a unidade: "); 
-         scanf("%d", &Informacao.unidade); 
-         if(unidade > 0 && unidade < 50){
+         scanf("%d", &Informacao.unidade);
+
+         if (Informacao.unidade > 0 && Informacao.unidade < 50) {
             confirmacao = 1;
-            
-         }else{
-            printf("Digite uma unidade válida(Entre 1 e 50)\n"); 
+         } else {
+            printf("Digite uma unidade válida (Entre 1 e 50)\n"); 
          }
+       } while (confirmacao == 0);
 
+       remover_palavra_ingles_pela_unidade(Raiz, Informacao);
 
-       }while(confirmacao == 0); 
-
-
-
-       //Já temos as informações, agr é chamar a função de exclusão da 2-3
-
-   }else{
+   } else {
        printf("A raiz está vazia\n"); 
    }
-
 }
 
 
+//Item (IV) Informar palavra em portugues e unidade, e excluir as palavras em ingles correspondente daquela palavra, que estejam naquela unidade
+
+void excluir_palavras_correspondentes_ingles(Arv23Port **Raiz) {
+    if (*Raiz != NULL) {
+        inf_ex Informacao;
+        Arv23Port *No_encontrado = NULL;
+        int confirmacao = 0, localizacao_info;
+
+        // Limpar o buffer de entrada para evitar problemas com `fgets`
+        while (getchar() != '\n');
+
+        printf("Digite a palavra em português que deseja excluir: ");
+        fgets(Informacao.palavra_ser_excluida, 100, stdin);
+        Informacao.palavra_ser_excluida[strcspn(Informacao.palavra_ser_excluida, "\n")] = '\0';
+
+        // Loop para garantir que a unidade seja válida
+        do {
+            printf("Digite a unidade: ");
+            scanf("%d", &Informacao.unidade);
+
+            if (Informacao.unidade > 0 && Informacao.unidade < 50) {
+                confirmacao = 1;
+            } else {
+                printf("Digite uma unidade válida (Entre 1 e 50)\n");
+            }
+        } while (confirmacao == 0);
+
+        // Buscar a palavra em português na árvore 2-3
+        localizacao_info = armazenar_No_ARV23(*Raiz, Informacao, &No_encontrado);
+
+        if (localizacao_info == 0) {
+            printf("A palavra pesquisada não foi encontrada\n");
+        } else {
+            if (localizacao_info == 1) {
+                // Remover correspondentes em inglês da árvore associada a `info1`
+                percorrer_remover_palavras_pela_unidade(No_encontrado->info1.significados_ingles, &(No_encontrado->info1.significados_ingles), Informacao);
+
+                if (No_encontrado->info1.significados_ingles == NULL) {
+                    printf("Como a palavra em português: '%s' ficou sem correspondentes em inglês, ela foi removida\n", Informacao.palavra_ser_excluida);
+                    remove_arv23(NULL, Raiz, No_encontrado->info1);
+                }
+            } else if (localizacao_info == 2) {
+                // Remover correspondentes em inglês da árvore associada a `info2`
+                percorrer_remover_palavras_pela_unidade(No_encontrado->info2.significados_ingles, &(No_encontrado->info2.significados_ingles), Informacao);
+
+                if (No_encontrado->info2.significados_ingles == NULL) {
+                    printf("Como a palavra em português: '%s' ficou sem correspondentes em inglês, ela foi removida\n", Informacao.palavra_ser_excluida);
+                    remove_arv23(NULL, Raiz, No_encontrado->info2);
+                }
+            }
+        }
+    } else {
+        printf("A árvore está vazia\n");
+    }
+}
 
 
 
