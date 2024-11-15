@@ -54,9 +54,10 @@ int main(){
                         break; 
                     case 3: 
                         // Remover palavra em inglês, informando a palavra em inglês e a unidade na qual ela pertence
+                        excluir_palavra_ingles_unidade(&palavras_portugues); 
                         break; 
                     case 4:    
-                        //Adicionar a descrição posteriormente.          
+                        excluir_palavras_correspondentes_ingles(&palavras_portugues);    
                         break; 
                     default: 
                         printf("Digite uma opção válida\n");
