@@ -60,7 +60,9 @@ void imprimirArv23(Arv23Port *no, int nivel);
 void inserir_palavra_teste(Arv23Port **Raiz);  
 void imprimir_palavras_pela_unidade(Arv23Port *Raiz); //Função auxiliar da unidade I
 void imprimir_todos_significados_palavra_especifica(Arv23Port *Raiz); //Função do Item II
-
+void excluir_palavra_ingles_unidade(Arv23Port **Raiz); //Função referente ao Item III
+void percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_ex Info); //Função do Item IV
+void excluir_palavras_correspondentes_ingles(Arv23Port **Raiz); //Item IV
 
 
 
@@ -73,7 +75,7 @@ int ehfolha(Arv23Port *no); // Função pra verificar se é folha, 0 para não, 
 Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); 
 Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao, int *info_posicao, Arv23Port **no_referencia); //Função de Inserção na Árvore 2-3 de palavra em portugues 
 Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho, Arv23Port **no_referencia); 
-int armazenar_No_ARV23(Arv23Port *Raiz, InfArv23 Info, Arv23Port **No_recuperado); //Essa função percorre a árvore 2-3 e recupera seu Nó
+int armazenar_No_ARV23(Arv23Port *Raiz, inf_ex Info, Arv23Port **No_recuperado); //Essa função percorre a árvore 2-3 e recupera seu Nó
 void imprimir_infos_23_por_unidade(Arv23Port *Raiz, int unidade); //Função pra imprimir todos as infos em ptbr e suas subárvores em ingles que correspondam a unidade
 
 
@@ -87,6 +89,8 @@ void menor_info_esquerda(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pa
 void menor_info_direita(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pai_no); 
 int situacao_da_arvore(Arv23Port **Pai, Arv23Port **Raiz, InfArv23 Info); 
 
+//Funções auxiliares da Arv23
+void remover_palavra_ingles_pela_unidade(Arv23Port **Raiz, inf_ex Info); 
 
 
 //Protótipos das funções da árvore Binária
