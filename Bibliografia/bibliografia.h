@@ -58,7 +58,9 @@ void adicionar_bibliografia(const char *filename, Arv23Port *Raiz);  //Função 
 void inserir_palavras_no_dicionario(Arv23Port **Raiz); 
 void imprimirArv23(Arv23Port *no, int nivel); 
 void inserir_palavra_teste(Arv23Port **Raiz);  
+void imprimir_palavras_pela_unidade(Arv23Port *Raiz); //Função auxiliar da unidade I
 void imprimir_todos_significados_palavra_especifica(Arv23Port *Raiz); //Função do Item II
+
 
 
 
@@ -68,15 +70,22 @@ void imprimir_todos_significados_palavra_especifica(Arv23Port *Raiz); //Função
 
 Arv23Port *criarNoArv23(InfArv23 Info, Arv23Port *Filho_Esq, Arv23Port *Filho_Cent); //Função de Criação do Nó da Árvore 2-3
 int ehfolha(Arv23Port *no); // Função pra verificar se é folha, 0 para não, 1 para sim
-//int adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); 
 Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); 
-//Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo); //Função que adiciona a Info em um Nó que possui espaço. 
-//Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho); // Função responsável por quebrar o Nó já cheio. 
 Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao, int *info_posicao, Arv23Port **no_referencia); //Função de Inserção na Árvore 2-3 de palavra em portugues 
 Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho, Arv23Port **no_referencia); 
-//Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao, Arv23Port **no_referencia);  
 int armazenar_No_ARV23(Arv23Port *Raiz, InfArv23 Info, Arv23Port **No_recuperado); //Essa função percorre a árvore 2-3 e recupera seu Nó
+void imprimir_infos_23_por_unidade(Arv23Port *Raiz, int unidade); //Função pra imprimir todos as infos em ptbr e suas subárvores em ingles que correspondam a unidade
 
+
+void imprimirArv23(Arv23Port *no, int nivel); //função de impressão, temporaria 
+
+
+
+//Funções de remoção da arv23
+int remove_arv23(Arv23Port **Pai, Arv23Port **raiz, InfArv23 info); 
+void menor_info_esquerda(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pai_no); 
+void menor_info_direita(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pai_no); 
+int situacao_da_arvore(Arv23Port **Pai, Arv23Port **Raiz, InfArv23 Info); 
 
 
 
@@ -88,6 +97,7 @@ int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, 
 int menor_filho(ArvBB_ing *Raiz, ArvBB_ing **menor); //Função que vai recuperar o endereço do menor filho à direita
 int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes); //Função que vai excluir a palavra em ingles da arvore, caso a unidade corresponda E a lista seja nula
 
+void imprimiArvBB(ArvBB_ing *no); 
 
 
 //Protótipo das funções da Lista Encadeada
