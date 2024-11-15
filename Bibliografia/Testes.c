@@ -154,11 +154,16 @@ void testeArvBB() {
 
 void imprimirLista(list_unid *lista) {
     list_unid *atual = lista;
+    printf("Unidade: "); 
     while (atual != NULL) {
-        printf("%d -> ", atual->unidade);
+        if(atual->prox != NULL){
+        printf("%d, ", atual->unidade);
+        }else{
+            printf("%d.\n", atual->unidade); 
+        }
         atual = atual->prox;
     }
-    printf("NULL\n");
+    
 }
 
 
