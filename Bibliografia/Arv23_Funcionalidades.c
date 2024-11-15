@@ -208,13 +208,13 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
 }
 
 
-int armazenar_No_ARV23(Arv23Port *Raiz, InfArv23 Info, Arv23Port **No_recuperado){
+int armazenar_No_ARV23(Arv23Port *Raiz, inf_ex Info, Arv23Port **No_recuperado){
    int resultado, comparacao1, comparacao2; 
    resultado = 0; //0 significa que não encontrou
 
    if(Raiz != NULL){
        resultado = armazenar_No_ARV23(Raiz->esq, Info, No_recuperado); 
-       comparacao1 = strcmp(Info.palavra_portugues, Raiz->info1.palavra_portugues); 
+       comparacao1 = strcmp(Info.palavra_ser_excluida, Raiz->info1.palavra_portugues); 
 
        if(resultado == 0){
 
@@ -236,7 +236,7 @@ int armazenar_No_ARV23(Arv23Port *Raiz, InfArv23 Info, Arv23Port **No_recuperado
             }else{
                 //tem que comparar a info e a info 2
                 //caso não encontre, mandar pro centro e pra direita
-                comparacao2 = strcmp(Info.palavra_portugues, Raiz->info2.palavra_portugues); 
+                comparacao2 = strcmp(Info.palavra_ser_excluida, Raiz->info2.palavra_portugues); 
 
                 if(comparacao1 == 0 || comparacao2 == 0){
                     //encontramos, resta saber em qual das infos
@@ -489,21 +489,59 @@ int remove_arv23(Arv23Port **Pai, Arv23Port **raiz, InfArv23 info) {
     return removido;
 }
 
-int situacao_da_arvore(Arv23Port **Pai, Arv23Port **Raiz, InfArv23 Info){
-    int resposta;
-    resposta = 0;
-    
+int situacao_da_arvore(Arv23Port **Pai, Arv23Port **Raiz, InfArv23 Info) {
+    int resposta = 0;
 
-    if((*Raiz)->n_infos == 1 & (*Raiz)->esq == NULL){
-       free(Raiz); 
+    if ((*Raiz)->n_infos == 1 && (*Raiz)->esq == NULL) { 
+       free(*Raiz); 
        *Raiz = NULL; 
        resposta = 1;  
-    }else{
-       resposta  = remove_arv23(Pai, Raiz, Info); 
+    } else {
+       resposta = remove_arv23(Pai, Raiz, Info); 
     }
 
-    
-
     return resposta; 
-    
+}
+
+
+void remover_palavra_ingles_pela_unidade(Arv23Port **Raiz, inf_ex Info) {
+    int operacao = 0;
+
+    if (*Raiz != NULL) {
+        if ((*Raiz)->esq != NULL) {
+            remover_palavra_ingles_pela_unidade(&((*Raiz)->esq), Info); // percorre a esquerda
+        }
+        if ((*Raiz)->cen != NULL) {
+            remover_palavra_ingles_pela_unidade(&((*Raiz)->cen), Info); // percorre o centro
+        }
+
+        if ((*Raiz)->n_infos == 2 && (*Raiz)->dir != NULL) {
+            remover_palavra_ingles_pela_unidade(&((*Raiz)->dir), Info); // percorre a direita, se houver
+        }
+
+        // Remoção na árvore binária de busca associada
+        operacao = remover_No_ArvBB(&((*Raiz)->info1.significados_ingles), Info);
+
+        if (operacao == 2) {
+            printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_ser_excluida, (*Raiz)->info1.palavra_portugues);
+        }
+        
+        if ((*Raiz)->info1.significados_ingles == NULL) {
+            printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", (*Raiz)->info1.palavra_portugues);
+            situacao_da_arvore(NULL, Raiz, (*Raiz)->info1);
+        }
+
+        if ((*Raiz)->n_infos == 2) {
+            operacao = remover_No_ArvBB(&((*Raiz)->info2.significados_ingles), Info);
+
+            if (operacao == 2) {
+                printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_ser_excluida, (*Raiz)->info2.palavra_portugues);
+            }
+            
+            if ((*Raiz)->info2.significados_ingles == NULL) {
+                printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", (*Raiz)->info2.palavra_portugues);
+                situacao_da_arvore(NULL, Raiz, (*Raiz)->info2);
+            }
+        }
+    }
 }
