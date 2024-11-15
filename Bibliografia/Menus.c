@@ -16,7 +16,8 @@ void testes_menu(){
     printf("[1]-Testar Arvore 2-3 Individual\n"); 
     printf("[2]-Testar Arvore BB Individual\n"); 
     printf("[3]-Teste da Lista Encadeada Individual\n"); 
-    printf("[4]-Teste das 3 estruturas de maneira Integrada\n"); 
+    printf("[4]-Teste das 3 estruturas de maneira Integrada\n");
+    printf("[0]-Sair\n");  
 }
 
 void sobre(){
