@@ -90,7 +90,7 @@ ArvRNPort *Procurando_Menor(ArvRNPort *Raiz); //percorre a subárvore em busca d
 ArvRNPort *mover2EsqVermelho(ArvRNPort **Raiz); 
 ArvRNPort *mover2DirVermelho(ArvRNPort **Raiz); 
 int remover_No_ArvRN(ArvRNPort **Raiz, InfArvRN Info); //Função principal de remoção
-void remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, inf_ex Info); //Função auxiliar do Item III
+void remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_ex Info); //Função auxiliar do Item III
 
 
 
@@ -114,8 +114,14 @@ int criar_no_Lista(list_unid **novo_elemento, int unidade); //Função pra criar
 int inserir_na_Lista(list_unid **Raiz, int unidade); //Função para inserir na Lista a Unidade
 int buscando_unidade(list_unid *Raiz_Lista, int unidade_buscada); //Função de percorrer a Lista, em busca da unidade pesquisada. 
 int remover_unidade_lista(list_unid **Raiz_Lista, int unidade_buscada); // Função para remover a Unidade da Lista. 
-void imprimirLista(list_unid *lista); 
+void imprimirLista(list_unid *lista);
 
+//funções de diagnostico e status
+
+void mensagem_status_impressao_unidade(int situacao); //função de diagnostico do Item I
+void mensagem_status_impressao_palavra_especifica(int situacao); //Função de diagnóstico do Item II
+void mensagem_status_exclusao_ingles_unidade(int situacao);  //Função de diagnóstico do Item III
+void mensagem_status_exclusao_correspondente_ingles(int situacao); //Função de diagnóstico do Item IV
 
 
 //Funcionalidades de Teste de Software
