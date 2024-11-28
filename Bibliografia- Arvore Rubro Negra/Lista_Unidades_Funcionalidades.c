@@ -5,7 +5,7 @@
 
 
 
-//precisamos de 4 funções aqui
+
 
 //Função de Inserir na Lista 
 

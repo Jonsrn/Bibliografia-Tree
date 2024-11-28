@@ -13,7 +13,8 @@ ArvBB_ing* criar_no_ArvBB(InfoBB info){
 
      novo_no = (ArvBB_ing*)malloc(sizeof(ArvBB_ing)); 
      if(novo_no == NULL){
-          printf("Falha na alocação\n"); 
+          //alocação falhou
+          exit(1); 
      }else{
         memset(novo_no, 0, sizeof(ArvBB_ing));  //zera o lixo da memória
         strcpy(novo_no->info.palavra_ingles, info.palavra_ingles); // Copia a string 
@@ -69,7 +70,7 @@ int inserir_ArvBB_Ingles(ArvBB_ing **Raiz, InfoBB info, ArvBB_ing **no_existente
 }
 
 
-//Essa função percorre a ArvBB, e recupera os Nós de acordo com um dos critérios, 0 recupera tudo, !=0 recupera valores especificos 
+//Essa função percorre a ArvBB, e recupera os Nós de acordo com um dos critérios, unidade = 0 recupera tudo, !=0 recupera valores especificos 
 
 int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, int *tam_vetor){
     int resultado; 
@@ -227,6 +228,7 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
 
 }
 
+//Função auxiliar do Item IV 
 
 void percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_ex Info){
      if(Raiz_percorrendo != NULL){
@@ -243,16 +245,15 @@ void percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_
         resultado = buscando_unidade(Raiz_percorrendo->info.unidades, Info.unidade); 
 
         if(resultado == 1){
-          remover_No_ArvBB(Raiz_original, Informacao);
+          printf("Removendo a palavra %s da unidade %d\n", Raiz_percorrendo->info.palavra_ingles, Info.unidade);
+
+          remover_No_ArvBB(Raiz_original, Informacao);         
 
           if(Raiz_percorrendo->info.unidades == NULL){
-             printf("Como não há mais unidades utilizando essa palavra, ela foi removida\n");    
+             printf("Como não há outras unidades utilizando essa palavra, ela foi removida\n");    
             }
 
-        }
-
-
-        
+        }     
 
      }
 }

@@ -262,9 +262,7 @@ void imprimir_infos_RN_por_unidade(ArvRNPort *Raiz, int unidade){
 
 //Funções de remoção
 
-//int remover_Auxiliar_ArvRN(ArvRNPort *Raiz, InfArvRN Info){
-  //  if(consultar_ArvRN)
-//}
+
 
 ArvRNPort *Remover_Menor(ArvRNPort *Raiz){
     ArvRNPort *nova_raiz = Raiz;
@@ -390,37 +388,48 @@ int remover_No_ArvRN(ArvRNPort **Raiz, InfArvRN Info) {
 }
 
 
+
+
+
+
 //função auxiliar de remoção do Item III
 
-void remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, inf_ex Info){
+void remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_ex Info) {
     int operacao = 0;
 
-    if(*Raiz != NULL){
-       if((*Raiz)->esq != NULL){
-           remover_palavra_ingles_pela_unidade(&((*Raiz)->esq), Info);
-       }
-       if((*Raiz)->dir != NULL){
-           remover_palavra_ingles_pela_unidade(&((*Raiz)->dir), Info); 
-       }
-
-       operacao = remover_No_ArvBB(&((*Raiz)->info.significados_ingles), Info);
-       
-       if (operacao == 2) {
-            printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_ser_excluida, (*Raiz)->info.palavra_portugues);
+    if (Raiz_percorrer != NULL) {
+        // Percorre a subárvore esquerda
+        if (Raiz_percorrer->esq != NULL) {
+            remover_palavra_ingles_pela_unidade(Raiz, Raiz_percorrer->esq, Info);
         }
 
-        if((*Raiz)->info.significados_ingles == NULL){
-            printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", (*Raiz)->info.palavra_portugues);
-            operacao = remover_No_ArvRN(Raiz, ((*Raiz)->info)); 
-
-
+        // Percorre a subárvore direita
+        if (Raiz_percorrer->dir != NULL) {
+            remover_palavra_ingles_pela_unidade(Raiz, Raiz_percorrer->dir, Info);
         }
 
+        // Remove a palavra em inglês da lista de significados
+        operacao = remover_No_ArvBB(&(Raiz_percorrer->info.significados_ingles), Info);
 
+        if (operacao == 2) {
+            printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_ser_excluida, Raiz_percorrer->info.palavra_portugues);
+        }
 
+        // Se a lista de significados em inglês ficou vazia
+        if (Raiz_percorrer->info.significados_ingles == NULL) {
+            printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", Raiz_percorrer->info.palavra_portugues);
+
+            // Remove o nó rubro-negro usando a raiz original
+            operacao = remover_No_ArvRN(Raiz, Raiz_percorrer->info);
+
+            if (operacao == 1) {
+                printf("Palavra em português: %s removida com sucesso da árvore!\n", Raiz_percorrer->info.palavra_portugues);
+            } else {
+                printf("Erro ao tentar remover a palavra: %s\n", Raiz_percorrer->info.palavra_portugues);
+            }
+        }
     }
-
-
 }
+
 
 
