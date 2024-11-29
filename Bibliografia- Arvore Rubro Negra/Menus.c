@@ -7,7 +7,8 @@ void menu_principal(){
     printf("Bem vindo a Bibliografia\n"); 
     printf("[1]-Importar Bibliografia\n"); 
     printf("[2]-Realizar Atividades\n"); 
-    printf("[3]-Sobre\n"); 
+    printf("[3]-Teste de Percurso\n"); 
+    printf("[4]-Sobre\n"); 
     printf("[0]-Sair\n"); 
 } 
 
