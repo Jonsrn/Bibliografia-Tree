@@ -64,7 +64,7 @@ int inserir_ArvBB_Ingles(ArvBB_ing **Raiz, InfoBB info, ArvBB_ing **no_existente
 
      return operacao; 
 
-     //operacao = 1, indica sucesso nominal, inserindo o Nó novo, operacao = 2 indica sucesso, mas o Nó já existe
+     //operacao = 1, indica sucesso nominal, inserindo o Nó novo, operacao = 2 indica sucesso, mas o Nó já existe, então utilizamos o nó que já existe
 
 
 }
@@ -84,7 +84,6 @@ int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, 
                 // Realoca o vetor dinâmico
                 ArvBB_ing **temp = (ArvBB_ing **)realloc(*vetor_ingles, (*tam_vetor + 1) * sizeof(ArvBB_ing *));
                 if (temp == NULL) {
-                    printf("\nErro na realocação do vetor\n");
                     resultado = 0; // Indica falha na realocação
                 } else {
                     *vetor_ingles = temp;
@@ -106,7 +105,6 @@ int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, 
 void imprimiArvBB(ArvBB_ing *no) {
     if (no != NULL) {
         imprimiArvBB(no->esq);
-
 
         printf("\nPalavra em inglês: %s, Unidades que ela está presente: \n", no->info.palavra_ingles);
         imprimirLista(no->info.unidades);
@@ -208,7 +206,6 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
 
                               }else{
                                    //falhou em encontrar o menor filho 
-                                   printf("Erro ao encontrar o menor filho.\n");
                                    operacao = 0; 
                               }
                          }else{
@@ -230,13 +227,15 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
 
 //Função auxiliar do Item IV 
 
-void percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_ex Info){
+int percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_ex Info){
+     int situacao = 0; //Nenhuma palavra foi removida
+
      if(Raiz_percorrendo != NULL){
         int resultado; 
 
-        percorrer_remover_palavras_pela_unidade(Raiz_percorrendo->esq, Raiz_original, Info);
+        situacao |= percorrer_remover_palavras_pela_unidade(Raiz_percorrendo->esq, Raiz_original, Info);
         
-        percorrer_remover_palavras_pela_unidade(Raiz_percorrendo->dir, Raiz_original, Info); 
+        situacao |= percorrer_remover_palavras_pela_unidade(Raiz_percorrendo->dir, Raiz_original, Info); 
 
         inf_ex Informacao;
         Informacao.unidade = Info.unidade; 
@@ -245,17 +244,24 @@ void percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_
         resultado = buscando_unidade(Raiz_percorrendo->info.unidades, Info.unidade); 
 
         if(resultado == 1){
-          printf("Removendo a palavra %s da unidade %d\n", Raiz_percorrendo->info.palavra_ingles, Info.unidade);
+          printf("Removendo a palavra %s da unidade %d\n", Raiz_percorrendo->info.palavra_ingles, Info.unidade);          
 
-          remover_No_ArvBB(Raiz_original, Informacao);         
+          resultado = remover_No_ArvBB(Raiz_original, Informacao);         
 
           if(Raiz_percorrendo->info.unidades == NULL){
              printf("Como não há outras unidades utilizando essa palavra, ela foi removida\n");    
             }
 
+          if(resultado == 1 || resultado == 2){
+               //1 e 2 significam que deram certo, mas 2 significa que só foi preciso remover o valor da unidade da lista
+               situacao = 1; //deu certo
+          }  
+
         }     
 
      }
+
+     return situacao; 
 }
 
 
