@@ -23,6 +23,7 @@ int criar_no_Lista(list_unid **novo_elemento, int unidade){
     return operacao; 
 }
 
+//Função de inserção na lista de unidades do Nó da ArvBB Inglês
 int inserir_na_Lista(list_unid **Raiz, int unidade) {
     int operacao = 1; // 1 indica sucesso
 
@@ -61,7 +62,7 @@ int inserir_na_Lista(list_unid **Raiz, int unidade) {
         }
     }
 
-    return operacao; // Retorna 1 para sucesso, 0 se a unidade já existe
+    return operacao; // Retorna 1 para sucesso, 2 se a unidade já existe, 0 significa falha
 }
 
 
@@ -85,6 +86,7 @@ int buscando_unidade(list_unid *Raiz_Lista, int unidade_buscada){
     return operacao; 
 }
 
+//Função que imprime a lista de unidades
 void imprimirLista(list_unid *lista) {
     list_unid *atual = lista;
     printf("Unidade: "); 
