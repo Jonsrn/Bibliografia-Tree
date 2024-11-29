@@ -1,13 +1,17 @@
 #ifndef _BIBLIOGRAFIA_H
 #define _BIBLIOGRAFIA_H
 
-#define PRETO 0
+//Definição das cores
+
+#define PRETO 0 
 #define VERMELHO 1
+
+#define MAX_CAMINHO 100  // Tamanho máximo do vetor de mensagens
 
 //Prototipos das estruturas
 
 typedef struct Lista_Unidades list_unid; //prototipo da lista encadeada das unidades
-typedef struct Infos_exclusao inf_ex; //Essa estrutura aqui é pra armazenar as variaveis de exclusao
+typedef struct Infos_op inf_op; //Essa estrutura aqui é pra armazenar as variaveis de exclusao
 typedef struct InfoArvBB InfoBB; //Essa struct é as infos da ArvBB    
 typedef struct ArvBB_ingles ArvBB_ing; //prototipo da arvore BB, pra colocar as palavras em ingles
 typedef struct Info_Arv_RN InfArvRN ;  //prototipo da informação da arvore Rubro Negra
@@ -18,10 +22,10 @@ typedef struct Lista_Unidades{
     list_unid *prox; 
 }list_unid;
 
-typedef struct Infos_exclusao{
-    char palavra_ser_excluida[100]; 
+typedef struct Infos_op{
+    char palavra_utilizada[100]; 
     int unidade; 
-}inf_ex;
+}inf_op;
 
 typedef struct InfoArvBB{
     char palavra_ingles[100]; 
@@ -64,9 +68,9 @@ int inserir_palavras_no_dicionario(ArvRNPort **Raiz);
 void imprimir_palavras_pela_unidade(ArvRNPort *Raiz); //Função auxiliar da unidade I
 void imprimir_todos_significados_palavra_especifica(ArvRNPort *Raiz); //Função do Item II
 void excluir_palavra_ingles_unidade(ArvRNPort **Raiz); //Função referente ao Item III
-int percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_ex Info); //Função do Item IV
+int percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_op Info); //Função do Item IV
 void excluir_palavras_correspondentes_ingles(ArvRNPort **Raiz); //Item IV
-
+void testar_caminho_palavras(ArvRNPort *Raiz); //Função auxiliar pra realizar o experimento
 
 
 //Protótipos das funções da Árvore Rubro Negra
@@ -81,8 +85,10 @@ int inserir_ArvRN_Portugues(ArvRNPort **Raiz, InfArvRN Info, ArvRNPort **No_exis
 void atualizar_Raiz_ARVRN(ArvRNPort **Raiz); //Função auxiliar que atualiza pra Preto a Raiz
 int consultar_ArvRN(ArvRNPort *Raiz, InfArvRN Info); 
 void imprimir_ArvRN(ArvRNPort *Raiz); 
-int armazenar_NO_ArvRN(ArvRNPort *Raiz, inf_ex Info, ArvRNPort **No_recuperado); //Função que busca e recupera o Nó
+int armazenar_NO_ArvRN(ArvRNPort *Raiz, inf_op Info, ArvRNPort **No_recuperado); //Função que busca e recupera o Nó
 int imprimir_infos_RN_por_unidade(ArvRNPort *Raiz, int unidade); //Imprime as informações pela unidade pesquisada
+int buscar_documentar_caminho(ArvRNPort *Raiz, inf_op Info, inf_op Infos_percurso[MAX_CAMINHO], int *tam_vetor); //Função pra realizar o teste de busca
+
 
 //Funções de remoção da Rubro-Negra
 ArvRNPort *Remover_Menor(ArvRNPort *Raiz); //remove o menor valor
@@ -90,7 +96,7 @@ ArvRNPort *Procurando_Menor(ArvRNPort *Raiz); //percorre a subárvore em busca d
 ArvRNPort *mover2EsqVermelho(ArvRNPort **Raiz); 
 ArvRNPort *mover2DirVermelho(ArvRNPort **Raiz); 
 int remover_No_ArvRN(ArvRNPort **Raiz, InfArvRN Info); //Função principal de remoção
-int remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_ex Info); //Função auxiliar do Item III
+int remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_op Info); //Função auxiliar do Item III
 
 
 
@@ -104,7 +110,7 @@ ArvBB_ing* criar_no_ArvBB(InfoBB info); //Função de Criação do Nó.
 int inserir_ArvBB_Ingles(ArvBB_ing **Raiz, InfoBB info, ArvBB_ing **no_existente); //Essa função insere o novo Nó na árvore, e recupera o endereço de seu Nó na árvore, mas se houver o Nó existente na árvore, seu Nó original será recuperado e o novo descartado. 
 int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, int *tam_vetor); // Função que recupera os Nós correspondentes, pra impressão posterior.
 int menor_filho(ArvBB_ing *Raiz, ArvBB_ing **menor); //Função que vai recuperar o endereço do menor filho à direita
-int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes); //Função que vai excluir a palavra em ingles da arvore, caso a unidade corresponda E a lista seja nula
+int remover_No_ArvBB(ArvBB_ing **Raiz, inf_op informacoes); //Função que vai excluir a palavra em ingles da arvore, caso a unidade corresponda E a lista seja nula
 void imprimiArvBB(ArvBB_ing *no); //Função de impressão da árvore binária de palavras em Inglês
 
 
@@ -125,7 +131,7 @@ void mensagem_status_impressao_unidade(int situacao); //função de diagnostico 
 void mensagem_status_impressao_palavra_especifica(int situacao); //Função de diagnóstico do Item II
 void mensagem_status_exclusao_ingles_unidade(int situacao);  //Função de diagnóstico do Item III
 void mensagem_status_exclusao_correspondente_ingles(int situacao); //Função de diagnóstico do Item IV
-
+void mensagem_status_teste(int situacao); //função de diagnóstico do teste
 
 
 
