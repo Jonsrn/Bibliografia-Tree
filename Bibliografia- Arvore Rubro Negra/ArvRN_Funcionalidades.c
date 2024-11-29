@@ -11,9 +11,7 @@ ArvRNPort *criar_no_ArvRN(InfArvRN Info){
     novo_no = NULL; 
 
     novo_no = (ArvRNPort*)malloc(sizeof(ArvRNPort));
-    if(novo_no == NULL){
-          printf("Falha na alocação\n"); 
-     }else{
+    if(novo_no != NULL){
         memset(novo_no, 0, sizeof(ArvRNPort));  //zera o lixo da memória
         strcpy(novo_no->info.palavra_portugues, Info.palavra_portugues); // Copia a string 
         novo_no->cor = VERMELHO; 
@@ -21,6 +19,7 @@ ArvRNPort *criar_no_ArvRN(InfArvRN Info){
         novo_no->esq = NULL; 
         novo_no->dir = NULL;
      }
+     
      return novo_no; 
 }
 
@@ -139,6 +138,7 @@ int inserir_ArvRN_Portugues(ArvRNPort **Raiz, InfArvRN Info, ArvRNPort **No_exis
           } else {
              *Raiz = novo_no;
              *No_existente = *Raiz; // Retorna o endereço do novo nó
+             operacao = 1; 
         } 
     }else{
         comparacao = strcmp(Info.palavra_portugues, (*Raiz)->info.palavra_portugues); 
@@ -221,38 +221,38 @@ int armazenar_NO_ArvRN(ArvRNPort *Raiz, inf_ex Info, ArvRNPort **No_recuperado){
     return operacao; 
 }
 
-void imprimir_infos_RN_por_unidade(ArvRNPort *Raiz, int unidade){
-
+int imprimir_infos_RN_por_unidade(ArvRNPort *Raiz, int unidade){
+    int situacao = 2; //não encontrou 
     if(Raiz != NULL){
         ArvBB_ing **vetor_ingles; 
         int tamanho_vetor, resultado; 
         vetor_ingles = NULL;
         tamanho_vetor = 0;  
 
-        imprimir_infos_RN_por_unidade(Raiz->esq, unidade); 
+        situacao |= imprimir_infos_RN_por_unidade(Raiz->esq, unidade); 
 
         resultado = Armazenar_No_ARVBB(Raiz->info.significados_ingles, unidade, &vetor_ingles, &tamanho_vetor); 
 
-        if(resultado == 1){
-            if(tamanho_vetor != 0){
-                printf("A palavra em português '%s' possui as seguintes palavras correspondentes na unidade '%d':\n", Raiz->info.palavra_portugues, unidade);
-                
-                for(int i = 0; i < tamanho_vetor; i++){
-                    printf("Palavra: %s\n", vetor_ingles[i]->info.palavra_ingles); 
-                }
-
-
+        if(resultado == 1 && tamanho_vetor != 0){
+           
+            printf("A palavra em português '%s' possui as seguintes palavras correspondentes na unidade '%d':\n", Raiz->info.palavra_portugues, unidade);
+            
+            for(int i = 0; i < tamanho_vetor; i++){
+                printf("Palavra: %s\n", vetor_ingles[i]->info.palavra_ingles); 
             }
+            situacao = 1; //pelo menos uma correspondencia foi encontrada
+
+
+           
         }
         //após imprimir, libera a linkagem linear 
         free(vetor_ingles);
 
-        imprimir_infos_RN_por_unidade(Raiz->dir, unidade); 
-
-
-
+        situacao |= imprimir_infos_RN_por_unidade(Raiz->dir, unidade); 
 
     }
+
+    return situacao; 
 }
 
 
@@ -394,25 +394,27 @@ int remover_No_ArvRN(ArvRNPort **Raiz, InfArvRN Info) {
 
 //função auxiliar de remoção do Item III
 
-void remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_ex Info) {
-    int operacao = 0;
+int remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_ex Info) {
+    int situacao = 0; //Nenhuma palavra foi removida
 
     if (Raiz_percorrer != NULL) {
+        int operacao;
         // Percorre a subárvore esquerda
-        if (Raiz_percorrer->esq != NULL) {
-            remover_palavra_ingles_pela_unidade(Raiz, Raiz_percorrer->esq, Info);
-        }
+        
+        situacao |= remover_palavra_ingles_pela_unidade(Raiz, Raiz_percorrer->esq, Info);
+        
 
         // Percorre a subárvore direita
-        if (Raiz_percorrer->dir != NULL) {
-            remover_palavra_ingles_pela_unidade(Raiz, Raiz_percorrer->dir, Info);
-        }
+        
+        situacao |= remover_palavra_ingles_pela_unidade(Raiz, Raiz_percorrer->dir, Info);
+        
 
         // Remove a palavra em inglês da lista de significados
         operacao = remover_No_ArvBB(&(Raiz_percorrer->info.significados_ingles), Info);
 
         if (operacao == 2) {
             printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_ser_excluida, Raiz_percorrer->info.palavra_portugues);
+            situacao = 1; //sucesso
         }
 
         // Se a lista de significados em inglês ficou vazia
@@ -421,6 +423,7 @@ void remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_perco
 
             // Remove o nó rubro-negro usando a raiz original
             operacao = remover_No_ArvRN(Raiz, Raiz_percorrer->info);
+            atualizar_Raiz_ARVRN(Raiz); 
 
             if (operacao == 1) {
                 printf("Palavra em português: %s removida com sucesso da árvore!\n", Raiz_percorrer->info.palavra_portugues);
@@ -429,6 +432,8 @@ void remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_perco
             }
         }
     }
+
+    return situacao; //0 se não apagou nada, 1 se apagou
 }
 
 

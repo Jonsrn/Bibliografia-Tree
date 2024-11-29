@@ -51,20 +51,20 @@ typedef struct ARV_Rubro_Negra_Portugues{
 //Protótipos dos Menus 
 
 
-void menu_principal(); 
-void sobre(); 
-void realizar_atividades(); 
-void testes_menu(); 
+void menu_principal(); //menu principal
+void sobre(); //menciona os autores do projeto
+void realizar_atividades(); //trata dos itens solicitados na atividade
+
 
 
 
 //Protótipo das Funções auxiliares
-void adicionar_bibliografia(const char *filename, ArvRNPort *Raiz);  //Função para importar o txt e preencher a árvore 2-3 e suas subsidiarias 
-void inserir_palavras_no_dicionario(ArvRNPort **Raiz);  
+void adicionar_bibliografia(const char *filename, ArvRNPort **Raiz);  //Função para importar o txt e preencher a árvore RN e suas subsidiarias 
+int inserir_palavras_no_dicionario(ArvRNPort **Raiz);  
 void imprimir_palavras_pela_unidade(ArvRNPort *Raiz); //Função auxiliar da unidade I
 void imprimir_todos_significados_palavra_especifica(ArvRNPort *Raiz); //Função do Item II
 void excluir_palavra_ingles_unidade(ArvRNPort **Raiz); //Função referente ao Item III
-void percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_ex Info); //Função do Item IV
+int percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_ex Info); //Função do Item IV
 void excluir_palavras_correspondentes_ingles(ArvRNPort **Raiz); //Item IV
 
 
@@ -82,7 +82,7 @@ void atualizar_Raiz_ARVRN(ArvRNPort **Raiz); //Função auxiliar que atualiza pr
 int consultar_ArvRN(ArvRNPort *Raiz, InfArvRN Info); 
 void imprimir_ArvRN(ArvRNPort *Raiz); 
 int armazenar_NO_ArvRN(ArvRNPort *Raiz, inf_ex Info, ArvRNPort **No_recuperado); //Função que busca e recupera o Nó
-void imprimir_infos_RN_por_unidade(ArvRNPort *Raiz, int unidade); 
+int imprimir_infos_RN_por_unidade(ArvRNPort *Raiz, int unidade); //Imprime as informações pela unidade pesquisada
 
 //Funções de remoção da Rubro-Negra
 ArvRNPort *Remover_Menor(ArvRNPort *Raiz); //remove o menor valor
@@ -90,7 +90,7 @@ ArvRNPort *Procurando_Menor(ArvRNPort *Raiz); //percorre a subárvore em busca d
 ArvRNPort *mover2EsqVermelho(ArvRNPort **Raiz); 
 ArvRNPort *mover2DirVermelho(ArvRNPort **Raiz); 
 int remover_No_ArvRN(ArvRNPort **Raiz, InfArvRN Info); //Função principal de remoção
-void remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_ex Info); //Função auxiliar do Item III
+int remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_ex Info); //Função auxiliar do Item III
 
 
 
@@ -105,8 +105,8 @@ int inserir_ArvBB_Ingles(ArvBB_ing **Raiz, InfoBB info, ArvBB_ing **no_existente
 int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, int *tam_vetor); // Função que recupera os Nós correspondentes, pra impressão posterior.
 int menor_filho(ArvBB_ing *Raiz, ArvBB_ing **menor); //Função que vai recuperar o endereço do menor filho à direita
 int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes); //Função que vai excluir a palavra em ingles da arvore, caso a unidade corresponda E a lista seja nula
+void imprimiArvBB(ArvBB_ing *no); //Função de impressão da árvore binária de palavras em Inglês
 
-void imprimiArvBB(ArvBB_ing *no); 
 
 
 //Protótipo das funções da Lista Encadeada
@@ -116,32 +116,15 @@ int buscando_unidade(list_unid *Raiz_Lista, int unidade_buscada); //Função de 
 int remover_unidade_lista(list_unid **Raiz_Lista, int unidade_buscada); // Função para remover a Unidade da Lista. 
 void imprimirLista(list_unid *lista);
 
+
+
 //funções de diagnostico e status
 
+void mensagem_status_montagem_dataset(int situacao); //Função de diagnóstico da importação do Dataset
 void mensagem_status_impressao_unidade(int situacao); //função de diagnostico do Item I
 void mensagem_status_impressao_palavra_especifica(int situacao); //Função de diagnóstico do Item II
 void mensagem_status_exclusao_ingles_unidade(int situacao);  //Função de diagnóstico do Item III
 void mensagem_status_exclusao_correspondente_ingles(int situacao); //Função de diagnóstico do Item IV
-
-
-//Funcionalidades de Teste de Software
-
-/*
-
-void imprimirArv23(Arv23Port *no, int nivel); 
-void testeArv23(); 
-void imprimirArvBB(ArvBB_ing *no, int nivel); 
-void testeArvBB(); 
-void testeLista(); 
-
-
-void imprimirArv23Completa(Arv23Port *no); 
-void imprimirArvBBComListas(ArvBB_ing *no, int nivel); 
-void testeIntegrado(Arv23Port **raiz_arv23); 
-
-*/
-
-
 
 
 

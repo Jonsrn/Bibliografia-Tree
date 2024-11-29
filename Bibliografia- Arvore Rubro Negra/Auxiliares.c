@@ -9,35 +9,34 @@
 //Item (I)  informar uma unidade e então imprima todas as palavras da unidade em português seguida das equivalentes em inglês;
 
 void imprimir_palavras_pela_unidade(ArvRNPort *Raiz){
-    int situacao; 
+    int situacao = 0; 
     if(Raiz != NULL){
         int confirmacao, unidade; 
         confirmacao = 0; 
-        situacao = 1; 
         //primeiro passo é digitar a unidade, como o dataset é fixo (50), vamos limitar por essa quantidade
-        do{
-           
-           printf("Digite a unidade do dataset que deseja imprimir: ");
-           scanf("%d", &unidade); 
-           if(unidade > 0 && unidade < 51){
-               confirmacao = 1; 
-           }else{
-               printf("Digite uma unidade válida (Entre 1 e 50)\n"); 
-           }
-        }while(confirmacao == 0); 
+        do {
+            printf("Digite a unidade: ");
+            
+            if (scanf("%d", &unidade) == 1) { // Valida se a entrada é um número
+                if (unidade > 0 && unidade <= 50) {
+                    confirmacao = 1;
+                } else {
+                    printf("Digite uma unidade válida (Entre 1 e 50).\n");
+                }
+            } else {
+                printf("Entrada inválida. Digite um número válido (Entre 1 e 50).\n");
+                while (getchar() != '\n'); // Limpa o buffer em caso de entrada inválida
+            }
+        } while (confirmacao == 0); 
 
          
         
 
-        imprimir_infos_RN_por_unidade(Raiz, unidade);  
+       situacao = imprimir_infos_RN_por_unidade(Raiz, unidade);  
 
-        //talvez fosse interessante retornar se encontrei pelo menos uma info pra imprimir
-       
+               
         
 
-    }else{
-        //A árvore está vazia
-        situacao = 0; 
     }
 
     mensagem_status_impressao_unidade(situacao); 
@@ -102,8 +101,6 @@ void excluir_palavra_ingles_unidade(ArvRNPort **Raiz) {
        int operacao;   
        int confirmacao = 0;
 
-       operacao = 1; //temporario
-
        
        while (getchar() != '\n');
        
@@ -116,7 +113,7 @@ void excluir_palavra_ingles_unidade(ArvRNPort **Raiz) {
             printf("Digite a unidade: ");
             
             if (scanf("%d", &Informacao.unidade) == 1) { // Valida se a entrada é um número
-                if (Informacao.unidade > 0 && Informacao.unidade < 50) {
+                if (Informacao.unidade > 0 && Informacao.unidade <= 50) {
                     confirmacao = 1;
                 } else {
                     printf("Digite uma unidade válida (Entre 1 e 50).\n");
@@ -127,7 +124,7 @@ void excluir_palavra_ingles_unidade(ArvRNPort **Raiz) {
             }
         } while (confirmacao == 0);
 
-       remover_palavra_ingles_pela_unidade(Raiz, *Raiz, Informacao); //mudar o retorno aqui
+       operacao = remover_palavra_ingles_pela_unidade(Raiz, *Raiz, Informacao); //mudar o retorno aqui
 
        if(operacao == 1){
            //Operação concluida com sucesso
@@ -137,9 +134,6 @@ void excluir_palavra_ingles_unidade(ArvRNPort **Raiz) {
            situacao = 2; 
        }
 
-
-
-       //como vou saber se removeu ou não ? tem que ter uma validação aqui. 
 
    } else {
        //A raiz está vazia
@@ -170,12 +164,16 @@ void excluir_palavras_correspondentes_ingles(ArvRNPort **Raiz) {
         // Loop para garantir que a unidade seja válida
         do {
             printf("Digite a unidade: ");
-            scanf("%d", &Informacao.unidade);
-
-            if (Informacao.unidade > 0 && Informacao.unidade < 50) {
-                confirmacao = 1;
+            
+            if (scanf("%d", &Informacao.unidade) == 1) { // Valida se a entrada é um número
+                if (Informacao.unidade > 0 && Informacao.unidade <= 50) {
+                    confirmacao = 1;
+                } else {
+                    printf("Digite uma unidade válida (Entre 1 e 50).\n");
+                }
             } else {
-                printf("Digite uma unidade válida (Entre 1 e 50)\n");
+                printf("Entrada inválida. Digite um número válido (Entre 1 e 50).\n");
+                while (getchar() != '\n'); // Limpa o buffer em caso de entrada inválida
             }
         } while (confirmacao == 0);
 
@@ -189,12 +187,38 @@ void excluir_palavras_correspondentes_ingles(ArvRNPort **Raiz) {
         } else {
             
             // Remover correspondentes em inglês da árvore associadas
-            percorrer_remover_palavras_pela_unidade(No_encontrado->info.significados_ingles, &(No_encontrado->info.significados_ingles), Informacao);
+            resultado = percorrer_remover_palavras_pela_unidade(No_encontrado->info.significados_ingles, &(No_encontrado->info.significados_ingles), Informacao);
+            
+            if(resultado == 1){
+                //Remoção da arvore binária efetuada com sucesso
+                
+                if (No_encontrado->info.significados_ingles == NULL) {
+                    resultado = remover_No_ArvRN(Raiz, No_encontrado->info);
+                    atualizar_Raiz_ARVRN(Raiz);  
+                    
+                    if(resultado != 1){
+                        //Falha na remoção na árvore RN
+                        situacao = 4; 
+                    }else{
+                        //sucesso na remoção da RN
+                        situacao = 1; 
+                    }
 
-            if (No_encontrado->info.significados_ingles == NULL) {
-                printf("Como a palavra em português: '%s' ficou sem correspondentes em inglês, ela foi removida\n", Informacao.palavra_ser_excluida);
-                remover_No_ArvRN(Raiz, No_encontrado->info); 
+                }else{
+                    //Não precisa remover da Rubro Negra (operação efetuada com sucesso)
+                    situacao = 3; 
+                }
+            
+            
+            
+            }else{
+                //Nenhuma palavra removida (pois nenhuma na ArvBB correspondeu a unidade solicitada)
+                situacao = 5; 
             }
+           
+            
+
+            
         } 
         
     } else {
