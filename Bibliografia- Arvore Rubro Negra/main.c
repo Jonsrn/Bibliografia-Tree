@@ -7,7 +7,7 @@ int main(){
    ArvRNPort *palavras_portugues; 
    palavras_portugues = NULL; 
 
-   int op1, op2, op3; 
+   int op1, op2; 
 
    do{
       menu_principal(); 
@@ -51,8 +51,12 @@ int main(){
             }while(op2 !=0); 
 
             break; 
-
         case 3: 
+          //testar o caminho de busca de 30 palavras em português, guardar o caminho e os tempos
+          testar_caminho_palavras(palavras_portugues);
+          break;           
+
+        case 4: 
              sobre(); 
              break; 
 
