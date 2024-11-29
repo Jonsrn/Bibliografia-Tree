@@ -202,11 +202,11 @@ void imprimir_ArvRN(ArvRNPort *Raiz){
     }
 } 
 
-int armazenar_NO_ArvRN(ArvRNPort *Raiz, inf_ex Info, ArvRNPort **No_recuperado){
+int armazenar_NO_ArvRN(ArvRNPort *Raiz, inf_op Info, ArvRNPort **No_recuperado){
     int operacao, comparacao; 
     operacao = 0; //0 significa que não encontrou
     if(Raiz != NULL){
-        comparacao = strcmp(Info.palavra_ser_excluida, Raiz->info.palavra_portugues);
+        comparacao = strcmp(Info.palavra_utilizada, Raiz->info.palavra_portugues);
 
         if(comparacao < 0){
             operacao = armazenar_NO_ArvRN(Raiz->esq, Info, No_recuperado); 
@@ -394,7 +394,7 @@ int remover_No_ArvRN(ArvRNPort **Raiz, InfArvRN Info) {
 
 //função auxiliar de remoção do Item III
 
-int remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_ex Info) {
+int remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percorrer, inf_op Info) {
     int situacao = 0; //Nenhuma palavra foi removida
 
     if (Raiz_percorrer != NULL) {
@@ -413,7 +413,7 @@ int remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percor
         operacao = remover_No_ArvBB(&(Raiz_percorrer->info.significados_ingles), Info);
 
         if (operacao == 2) {
-            printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_ser_excluida, Raiz_percorrer->info.palavra_portugues);
+            printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_utilizada, Raiz_percorrer->info.palavra_portugues);
             situacao = 1; //sucesso
         }
 
@@ -438,3 +438,31 @@ int remover_palavra_ingles_pela_unidade(ArvRNPort **Raiz, ArvRNPort *Raiz_percor
 
 
 
+int buscar_documentar_caminho(ArvRNPort *Raiz, inf_op Info, inf_op Infos_percurso[MAX_CAMINHO], int *tam_vetor){
+    int encontrou, comparacao;
+    encontrou = 0; //não encontrou 
+    if(Raiz != NULL){
+        comparacao = strcmp(Info.palavra_utilizada, Raiz->info.palavra_portugues); 
+
+        if(comparacao < 0){
+            //percorre pra esquerda
+            snprintf(Infos_percurso[*tam_vetor].palavra_utilizada, 100,"Estou percorrendo à esquerda de %s", Raiz->info.palavra_portugues);
+            (*tam_vetor)++;
+            encontrou = buscar_documentar_caminho(Raiz->esq, Info, Infos_percurso, tam_vetor); 
+            
+
+        }else if(comparacao > 0){
+            //percorre pra direita
+            snprintf(Infos_percurso[*tam_vetor].palavra_utilizada, 100,"Estou percorrendo à direita de %s", Raiz->info.palavra_portugues);
+            (*tam_vetor)++;  
+            encontrou = buscar_documentar_caminho(Raiz->dir, Info, Infos_percurso, tam_vetor);                       
+
+        }else if(comparacao == 0){
+
+            encontrou = 1; //palavra encontrada com sucesso 
+        }
+
+    }
+
+    return encontrou; 
+}

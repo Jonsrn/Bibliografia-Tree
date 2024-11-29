@@ -49,7 +49,7 @@ void imprimir_palavras_pela_unidade(ArvRNPort *Raiz){
 void imprimir_todos_significados_palavra_especifica(ArvRNPort *Raiz){
     int situacao; 
     if(Raiz != NULL){
-       inf_ex Informacao; 
+       inf_op Informacao; 
        int operacao = 0; //0, significa que não deu certo
 
        ArvRNPort *No_recuperado; 
@@ -58,12 +58,12 @@ void imprimir_todos_significados_palavra_especifica(ArvRNPort *Raiz){
        while (getchar() != '\n');
        
        printf("Digite a palavra em português que deseja imprimir seus significados: ");
-       fgets(Informacao.palavra_ser_excluida, 100, stdin);
-       Informacao.palavra_ser_excluida[strcspn(Informacao.palavra_ser_excluida, "\n")] = '\0';  
+       fgets(Informacao.palavra_utilizada, 100, stdin);
+       Informacao.palavra_utilizada[strcspn(Informacao.palavra_utilizada, "\n")] = '\0';  
 
        operacao =  armazenar_NO_ArvRN(Raiz, Informacao, &No_recuperado); 
 
-       //devo trocar o nome dessa estrutura Inf_ex
+    
 
        
        if(situacao != 0){
@@ -86,18 +86,18 @@ void imprimir_todos_significados_palavra_especifica(ArvRNPort *Raiz){
 Item (III) Excluir palavra em ingles, de determinada unidade
 Como vai funcionar, temos a palavra em inglês e sua respectiva unidade (ou seja, ambas tem que corresponder, pra que a exclusão seja feita)
 uma palavra em inglês pode estar em mais de uma unidade(baseado no meu dataset), então partiremos de uma lógica de reversão em cascata
-como não sabemos onde exatamente essa palavra em ingles está, devemos percorrer todas as infos da arvore 2-3
-Em cada Info da 2-3, vamos percorrer todos os nós da árvore binária, ao encontrar a palavra correspondente
+como não sabemos onde exatamente essa palavra em ingles está, devemos percorrer todas as infos da arvore RN
+Em cada Info da RN, vamos percorrer todos os nós da árvore binária, ao encontrar a palavra correspondente
 vamos mandar remover a unidade da lista, caso a unidade removida seja a única naquela lista, tornando-a nula
 faremos a remoção definitiva do nome do dataset, com a remoção do Nó, caso a subárvore então fique NULA
-faremos a exclusão da palavra em português da 2-3
+faremos a exclusão da palavra em português da RN
 
 */
 
 void excluir_palavra_ingles_unidade(ArvRNPort **Raiz) {
    int situacao; 
    if (*Raiz != NULL) {
-       inf_ex Informacao;  
+       inf_op Informacao;  
        int operacao;   
        int confirmacao = 0;
 
@@ -105,8 +105,8 @@ void excluir_palavra_ingles_unidade(ArvRNPort **Raiz) {
        while (getchar() != '\n');
        
        printf("Digite a palavra em inglês que deseja excluir: ");
-       fgets(Informacao.palavra_ser_excluida, 100, stdin);
-       Informacao.palavra_ser_excluida[strcspn(Informacao.palavra_ser_excluida, "\n")] = '\0';
+       fgets(Informacao.palavra_utilizada, 100, stdin);
+       Informacao.palavra_utilizada[strcspn(Informacao.palavra_utilizada, "\n")] = '\0';
 
       
        do {
@@ -150,7 +150,7 @@ void excluir_palavras_correspondentes_ingles(ArvRNPort **Raiz) {
     int situacao; 
 
     if (*Raiz != NULL) {
-        inf_ex Informacao;
+        inf_op Informacao;
         ArvRNPort *No_encontrado = NULL;
         int confirmacao = 0, resultado;
 
@@ -158,8 +158,8 @@ void excluir_palavras_correspondentes_ingles(ArvRNPort **Raiz) {
         while (getchar() != '\n');
 
         printf("Digite a palavra em português que deseja excluir: ");
-        fgets(Informacao.palavra_ser_excluida, 100, stdin);
-        Informacao.palavra_ser_excluida[strcspn(Informacao.palavra_ser_excluida, "\n")] = '\0';
+        fgets(Informacao.palavra_utilizada, 100, stdin);
+        Informacao.palavra_utilizada[strcspn(Informacao.palavra_utilizada, "\n")] = '\0';
 
         // Loop para garantir que a unidade seja válida
         do {

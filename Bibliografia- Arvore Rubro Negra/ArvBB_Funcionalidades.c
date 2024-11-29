@@ -134,7 +134,7 @@ int menor_filho(ArvBB_ing *Raiz, ArvBB_ing **menor){
 
 }
 
-int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
+int remover_No_ArvBB(ArvBB_ing **Raiz, inf_op informacoes){
      ArvBB_ing *aux, *end_filho, *endMenorFilho; 
      int operacao, comparacao; 
      operacao = 1; //1 significa sucesso
@@ -143,7 +143,7 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
           //Se a arvore estiver vazia, não há nada a ser feito aqui (mas isso vai significar que o Nó lá na 2-3 vai ser excluído)
           operacao = 0; //Não há árvore
      }else{
-          comparacao = strcmp(informacoes.palavra_ser_excluida, (*Raiz)->info.palavra_ingles);
+          comparacao = strcmp(informacoes.palavra_utilizada, (*Raiz)->info.palavra_ingles);
           
           if(comparacao < 0){ // se for menor, buscar na subarvore a esquerda
                operacao = remover_No_ArvBB(&((*Raiz)->esq), informacoes); 
@@ -198,8 +198,8 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
                          if((*Raiz)->info.unidades == NULL){
                               if(menor_filho((*Raiz)->dir, &endMenorFilho) == 1){
                                    (*Raiz)->info = endMenorFilho->info;
-                                   inf_ex novo_inf_ex;
-                                   strcpy(novo_inf_ex.palavra_ser_excluida, endMenorFilho->info.palavra_ingles);
+                                   inf_op novo_inf_ex;
+                                   strcpy(novo_inf_ex.palavra_utilizada, endMenorFilho->info.palavra_ingles);
                                    novo_inf_ex.unidade = informacoes.unidade;
                                    operacao = remover_No_ArvBB(&((*Raiz)->dir), novo_inf_ex);
                                    
@@ -227,7 +227,7 @@ int remover_No_ArvBB(ArvBB_ing **Raiz, inf_ex informacoes){
 
 //Função auxiliar do Item IV 
 
-int percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_ex Info){
+int percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_ing **Raiz_original, inf_op Info){
      int situacao = 0; //Nenhuma palavra foi removida
 
      if(Raiz_percorrendo != NULL){
@@ -237,9 +237,9 @@ int percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_i
         
         situacao |= percorrer_remover_palavras_pela_unidade(Raiz_percorrendo->dir, Raiz_original, Info); 
 
-        inf_ex Informacao;
+        inf_op Informacao;
         Informacao.unidade = Info.unidade; 
-        strcpy(Informacao.palavra_ser_excluida, Raiz_percorrendo->info.palavra_ingles);
+        strcpy(Informacao.palavra_utilizada, Raiz_percorrendo->info.palavra_ingles);
         
         resultado = buscando_unidade(Raiz_percorrendo->info.unidades, Info.unidade); 
 
