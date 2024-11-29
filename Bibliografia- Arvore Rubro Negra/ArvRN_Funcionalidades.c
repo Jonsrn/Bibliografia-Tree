@@ -210,14 +210,15 @@ int armazenar_NO_ArvRN(ArvRNPort *Raiz, inf_op Info, ArvRNPort **No_recuperado){
 
         if(comparacao < 0){
             operacao = armazenar_NO_ArvRN(Raiz->esq, Info, No_recuperado); 
+        }else if(comparacao > 0){
+            operacao = armazenar_NO_ArvRN(Raiz->dir, Info, No_recuperado); 
         }else if(comparacao == 0){
             //encontrou
             *No_recuperado = Raiz; 
             operacao = 1; 
-        }else{
-            operacao = armazenar_NO_ArvRN(Raiz->dir, Info, No_recuperado); 
-        }
-    }
+       }
+    }   
+
     return operacao; 
 }
 

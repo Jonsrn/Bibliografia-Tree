@@ -66,7 +66,7 @@ void imprimir_todos_significados_palavra_especifica(ArvRNPort *Raiz){
     
 
        
-       if(situacao != 0){
+       if(operacao != 0){
               imprimiArvBB(No_recuperado->info.significados_ingles);
               situacao = 1; //deu certo 
 
