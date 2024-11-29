@@ -46,6 +46,7 @@ void mensagem_status_impressao_unidade(int situacao){
   
 }
 
+//Item II
 void mensagem_status_impressao_palavra_especifica(int situacao){
 
     if(situacao == 0){
@@ -97,5 +98,17 @@ void mensagem_status_exclusao_correspondente_ingles(int situacao){
     }
     if(situacao == 5){
         printf("A operação falhou porque a remoção não encontrou nenhuma palavra em inglês correspondente a unidade solicitada.\n");
+    }
+}
+
+void mensagem_status_teste(int situacao){
+    if(situacao == 0){
+        printf("A operação falhou porque o dataset está vazio\n");
+    }
+    if(situacao == 1){
+        printf("A Operação foi realizada com sucesso, os resultados dos testes foram armazenados no txt\n"); 
+    }
+    if(situacao == 2){
+        printf("A operação falhou, porque não foi possivel abrir o arquivo\n"); 
     }
 }
