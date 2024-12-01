@@ -8,17 +8,17 @@
 // Função para criar um novo nó
 Arv23Port *criarNoArv23(InfArv23 Info, Arv23Port *Filho_Esq, Arv23Port *Filho_Cent) {
     Arv23Port *Novo_no = (Arv23Port *)malloc(sizeof(Arv23Port));
-    if (Novo_no == NULL) {
-        printf("Falha na alocação\n");
-        exit(1); // Encerra o programa em caso de falha na alocação
-    }
-    memset(Novo_no, 0, sizeof(Arv23Port)); // Zera para evitar lixo
+  
+    if (Novo_no != NULL) {    
+        memset(Novo_no, 0, sizeof(Arv23Port)); // Zera para evitar lixo
+        Novo_no->info1 = Info;
+        Novo_no->esq = Filho_Esq;
+        Novo_no->cen = Filho_Cent;
+        Novo_no->dir = NULL;
+        Novo_no->n_infos = 1;
 
-    Novo_no->info1 = Info;
-    Novo_no->esq = Filho_Esq;
-    Novo_no->cen = Filho_Cent;
-    Novo_no->dir = NULL;
-    Novo_no->n_infos = 1;
+    }
+
     return Novo_no;
 }
 
@@ -50,13 +50,13 @@ Arv23Port *adicionaChave(Arv23Port *no, InfArv23 Info, Arv23Port *MaiorNo) {
     }
     return no; // Retorna o nó atualizado em vez de um inteiro
 }
+
+
 // Função para quebrar o nó com indicação de raiz
 
 
-
-
 // Função para quebrar o nó
-Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho, Arv23Port **no_referencia) {
+Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho) {
     int comparacao1 = strcmp(Info.palavra_portugues, (*No)->info2.palavra_portugues);
     int comparacao2 = strcmp(Info.palavra_portugues, (*No)->info1.palavra_portugues);
     Arv23Port *Maior;
@@ -65,19 +65,16 @@ Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port 
         // Caso 1: Info > info2
         *promove = (*No)->info2;
         Maior = criarNoArv23(Info, (*No)->dir, Filho);
-        *no_referencia = Maior; 
     } else if (comparacao2 > 0) {
         // Caso 2: info1 < Info < info2
         *promove = Info;
         Maior = criarNoArv23((*No)->info2, Filho, (*No)->dir);
-        *no_referencia = Maior;
     } else {
         // Caso 3: Info < info1
         *promove = (*No)->info1;
         Maior = criarNoArv23((*No)->info2, (*No)->cen, (*No)->dir);
         (*No)->info1 = Info;
         (*No)->cen = Filho;
-        *no_referencia = *No; 
     }
 
     // Atualiza o nó atual
@@ -92,7 +89,7 @@ Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port 
 
 
 // Função de inserção na árvore 2-3
-Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao, int *info_posicao, Arv23Port **no_referencia) {
+Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Port **Pai, int *situacao) {
     Arv23Port *MaiorNo = NULL;
     InfArv23 promove_local; // Variável local para promoção
     int comparacao1, comparacao2;
@@ -105,25 +102,17 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
             *situacao = 0; // Falha total devido à falha de alocação
         } else {
             *situacao = 1;       // Sucesso com nova inserção
-            *no_referencia = *no; // Retorna o endereço do novo nó
-            *info_posicao = 1;    // A palavra está em info1
         }
     } else {
         comparacao1 = strcmp(Info.palavra_portugues, (*no)->info1.palavra_portugues);
 
         if (comparacao1 == 0) {
             *situacao = 2;        // A palavra já existe em info1
-            *info_posicao = 1;
-            *no_referencia = *no;
             verificacao = 1;
-        }
-
-        if ((*no)->n_infos == 2) {
+        }else if ((*no)->n_infos == 2) {
             comparacao2 = strcmp(Info.palavra_portugues, (*no)->info2.palavra_portugues);
             if (comparacao2 == 0) {
                 *situacao = 2;    // A palavra já existe em info2
-                *info_posicao = 2;
-                *no_referencia = *no;
                 verificacao = 1;
             }
         }
@@ -132,44 +121,32 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
             if (ehfolha(*no)) { // Se for folha
                 if ((*no)->n_infos == 1) {
                     // Nó tem apenas uma informação
-                    printf("Adicionando segunda chave '%s' no nó com info1='%s'\n", Info.palavra_portugues, (*no)->info1.palavra_portugues);
                     *no = adicionaChave(*no, Info, NULL); // Retorna o nó atualizado
                     *situacao = 1; // Indica que a palavra foi adicionada com sucesso
-                    *no_referencia = *no; // Recupera o endereço
-                    *info_posicao = 1; // Atualiza a posição correta
                     MaiorNo = NULL;
                 } else {
                     // Nó tem duas informações, precisa quebrar
-                    printf("Quebrando o nó. Antes da quebra, info1='%s' e info2='%s', nova info='%s'\n", (*no)->info1.palavra_portugues, (*no)->info2.palavra_portugues, Info.palavra_portugues);
-                    MaiorNo = quebraNo(no, Info, &promove_local, NULL, no_referencia);
+                    MaiorNo = quebraNo(no, Info, &promove_local, NULL);
                     if (Pai == NULL || *Pai == NULL) {
                         // Criação de uma nova raiz
                         *no = criarNoArv23(promove_local, *no, MaiorNo);
                         MaiorNo = NULL;
-                        *info_posicao = 1;
-                        *no_referencia = *no;
-                        printf("Novo nó raiz criado com promoção de '%s'\n", promove_local.palavra_portugues);
                     } else {
                         *promove = promove_local;
-                        *no_referencia = *no;
-                        *info_posicao = 1;
                     }
                 }
             } else {
                 // Nó não é folha, precisa descer na árvore
                 if (comparacao1 < 0) {
-                    printf("Descendo para a esquerda do nó com info1='%s'\n", (*no)->info1.palavra_portugues);
-                    MaiorNo = insereArv23(&((*no)->esq), Info, &promove_local, no, situacao, info_posicao, no_referencia);
+                    MaiorNo = insereArv23(&((*no)->esq), Info, &promove_local, no, situacao);
                 } else {
                     if ((*no)->n_infos == 2) {
                         comparacao2 = strcmp(Info.palavra_portugues, (*no)->info2.palavra_portugues);
                     }
                     if (((*no)->n_infos == 1) || (comparacao2 < 0)) {
-                        printf("Descendo para o centro do nó com info1='%s'\n", (*no)->info1.palavra_portugues);
-                        MaiorNo = insereArv23(&((*no)->cen), Info, &promove_local, no, situacao, info_posicao, no_referencia);
+                        MaiorNo = insereArv23(&((*no)->cen), Info, &promove_local, no, situacao);
                     } else {
-                        printf("Descendo para a direita do nó com info2='%s'\n", (*no)->info2.palavra_portugues);
-                        MaiorNo = insereArv23(&((*no)->dir), Info, &promove_local, no, situacao, info_posicao, no_referencia);
+                        MaiorNo = insereArv23(&((*no)->dir), Info, &promove_local, no, situacao);
                     }
                 }
 
@@ -179,25 +156,21 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
                         // Adiciona o valor promovido ao nó
                         *no = adicionaChave(*no, promove_local, MaiorNo); // Retorna o nó atualizado
                         *situacao = 1;
-                        *no_referencia = *no;
-                        *info_posicao = 1;
                         MaiorNo = NULL;
                     } else {
                         // Quebra o nó atual e promove o valor
                         InfArv23 promove1;
-                        MaiorNo = quebraNo(no, promove_local, &promove1, MaiorNo, no_referencia);
+                        MaiorNo = quebraNo(no, promove_local, &promove1, MaiorNo);
                         if (Pai == NULL || *Pai == NULL) {
                             // Criação de uma nova raiz
                             *no = criarNoArv23(promove1, *no, MaiorNo);
                             MaiorNo = NULL;
-                            *info_posicao = 1;
-                            *no_referencia = *no;
+                            //*no_referencia = *no;
                         } else {
                             *promove = promove1;
-                            *info_posicao = 1;
                         }
                         *situacao = 1;
-                        *no_referencia = *no;
+                        //*no_referencia = *no;
                     }
                 }
             }
@@ -207,14 +180,15 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
     return MaiorNo;
 }
 
+//Função que busca e recupera o nó correspondente a palavra pesquisada, 0 quer dizer que não encontrou, 1 que deu certo (e está na info1) e 2 que deu certo(e está na info2)
 
-int armazenar_No_ARV23(Arv23Port *Raiz, inf_ex Info, Arv23Port **No_recuperado){
+int armazenar_No_ARV23(Arv23Port *Raiz, inf_op Info, Arv23Port **No_recuperado){
    int resultado, comparacao1, comparacao2; 
    resultado = 0; //0 significa que não encontrou
 
    if(Raiz != NULL){
        resultado = armazenar_No_ARV23(Raiz->esq, Info, No_recuperado); 
-       comparacao1 = strcmp(Info.palavra_ser_excluida, Raiz->info1.palavra_portugues); 
+       comparacao1 = strcmp(Info.palavra_utilizada, Raiz->info1.palavra_portugues); 
 
        if(resultado == 0){
 
@@ -236,7 +210,7 @@ int armazenar_No_ARV23(Arv23Port *Raiz, inf_ex Info, Arv23Port **No_recuperado){
             }else{
                 //tem que comparar a info e a info 2
                 //caso não encontre, mandar pro centro e pra direita
-                comparacao2 = strcmp(Info.palavra_ser_excluida, Raiz->info2.palavra_portugues); 
+                comparacao2 = strcmp(Info.palavra_utilizada, Raiz->info2.palavra_portugues); 
 
                 if(comparacao1 == 0 || comparacao2 == 0){
                     //encontramos, resta saber em qual das infos
@@ -273,8 +247,18 @@ int armazenar_No_ARV23(Arv23Port *Raiz, inf_ex Info, Arv23Port **No_recuperado){
    return resultado;  
 }
 
-void imprimir_infos_23_por_unidade(Arv23Port *Raiz, int unidade){
-    
+
+//Funções referentes ao Item I
+
+void imprimir_info(const char *palavra_portugues, ArvBB_ing **vetor, int tamanho, int unidade) {
+    printf("A palavra em português '%s' possui as seguintes palavras correspondentes na unidade '%d':\n", palavra_portugues, unidade);
+    for (int i = 0; i < tamanho; i++) {
+        printf("Palavra: %s\n", vetor[i]->info.palavra_ingles); 
+    }
+}
+
+int imprimir_infos_23_por_unidade(Arv23Port *Raiz, int unidade){
+    int situacao;     
     if(Raiz !=NULL){
         ArvBB_ing **vetor_inglesInfo1, **vetor_inglesInfo2; 
         int tamanho_vetor1, tamanho_vetor2, resultado; 
@@ -282,53 +266,67 @@ void imprimir_infos_23_por_unidade(Arv23Port *Raiz, int unidade){
         vetor_inglesInfo2 = NULL; 
         tamanho_vetor1 = 0; 
         tamanho_vetor2 = 0; 
-        imprimir_infos_23_por_unidade(Raiz->esq, unidade); //manda pra esquerda
+        situacao = 0; //inicia zerado
         
+        
+         situacao |= imprimir_infos_23_por_unidade(Raiz->esq, unidade); //manda pra esquerda
+
         //como temos info1, mandaremos agr pra imprimir a ArvBB interna
+        resultado = 0; //inicia zerado
+
 
         resultado = Armazenar_No_ARVBB(Raiz->info1.significados_ingles, unidade, &vetor_inglesInfo1, &tamanho_vetor1); 
 
         if(resultado == 1){
             if(tamanho_vetor1 != 0){
-                printf("A palavra em português '%s' possui as seguintes palavras correspondentes na unidade '%d':\n", Raiz->info1.palavra_portugues, unidade);
-                for(int i = 0; i < tamanho_vetor1; i++){
-                    printf("Palavra: %s\n", vetor_inglesInfo1[i]->info.palavra_ingles); 
-                }
+                imprimir_info(Raiz->info1.palavra_portugues, vetor_inglesInfo1, tamanho_vetor1, unidade);
+                situacao = 1; //encontrou
             }    
         }
 
-        //após imprimir, libera a linkagem linear 
-        free(vetor_inglesInfo1);
+        //após imprimir, libera a linkagem linear
+        if(vetor_inglesInfo1 != NULL){
+            free(vetor_inglesInfo1);
+        } 
+        
+
+        
+        situacao |= imprimir_infos_23_por_unidade(Raiz->cen, unidade); 
+       
 
 
         if(Raiz->n_infos == 2){
+            resultado = 0;
             //Nesse caso, como há Info2, precisamos repetir o processo e percorrer sua subárvore
             resultado = Armazenar_No_ARVBB(Raiz->info2.significados_ingles, unidade, &vetor_inglesInfo2, &tamanho_vetor2); 
 
             if(resultado == 1){
                 if(tamanho_vetor2 != 0){
-                    printf("A palavra em português '%s' possui as seguintes palavras correspondentes na unidade '%d':\n", Raiz->info2.palavra_portugues, unidade);
-                    for(int i = 0; i < tamanho_vetor2; i++){
-                        printf("Palavra: %s\n", vetor_inglesInfo2[i]->info.palavra_ingles); 
-                    }
+                    imprimir_info(Raiz->info2.palavra_portugues, vetor_inglesInfo2, tamanho_vetor2, unidade);
+                    situacao = 1; //encontrou
                 }    
             }
 
             //após imprimir a info2, liberamos a linkagem linear
-            free(vetor_inglesInfo2); 
-        } 
-        
-        
-        
-        imprimir_infos_23_por_unidade(Raiz->cen, unidade); 
+            if(vetor_inglesInfo2 != NULL){
+                free(vetor_inglesInfo2); 
+            }
+           
+        }  
 
-        if(Raiz->n_infos == 2){
-            imprimir_infos_23_por_unidade(Raiz->dir, unidade); 
-        }
+       
 
+        situacao |= imprimir_infos_23_por_unidade(Raiz->dir, unidade); 
+        
+        
+        
+
+    }else{
+        situacao = 0; //não encontrou
     }
-}
 
+    return situacao; 
+}
 
 //Funções de remoção 
 
@@ -486,9 +484,11 @@ int remove_arv23(Arv23Port **Pai, Arv23Port **raiz, InfArv23 info) {
         }
     }
 
-    return removido;
+    return removido; //0 significa que não foi removido, 1 que removeu
 }
 
+
+//Função intermediaria pra remover a raiz propriamente
 int situacao_da_arvore(Arv23Port **Pai, Arv23Port **Raiz, InfArv23 Info) {
     int resposta = 0;
 
@@ -504,44 +504,102 @@ int situacao_da_arvore(Arv23Port **Pai, Arv23Port **Raiz, InfArv23 Info) {
 }
 
 
-void remover_palavra_ingles_pela_unidade(Arv23Port **Raiz, inf_ex Info) {
-    int operacao = 0;
+//Função referente ao item III, remover a ingles correspondente, e com aquela unidade 
+int remover_palavra_ingles_pela_unidade(Arv23Port **Raiz, Arv23Port *Raiz_percorrer, inf_op Info) {
+    int situacao;
 
-    if (*Raiz != NULL) {
-        if ((*Raiz)->esq != NULL) {
-            remover_palavra_ingles_pela_unidade(&((*Raiz)->esq), Info); // percorre a esquerda
-        }
-        if ((*Raiz)->cen != NULL) {
-            remover_palavra_ingles_pela_unidade(&((*Raiz)->cen), Info); // percorre o centro
-        }
+    if (Raiz_percorrer != NULL) {
+        int operacao;
+        situacao = 0; //inicia zerado 
 
-        if ((*Raiz)->n_infos == 2 && (*Raiz)->dir != NULL) {
-            remover_palavra_ingles_pela_unidade(&((*Raiz)->dir), Info); // percorre a direita, se houver
-        }
+        situacao |= remover_palavra_ingles_pela_unidade(Raiz, Raiz_percorrer->esq, Info); // percorre a esquerda
+        
+        
+        situacao |= remover_palavra_ingles_pela_unidade(Raiz, Raiz_percorrer->cen, Info); // percorre o centro
+        
+
+        
+        situacao |= remover_palavra_ingles_pela_unidade(Raiz, Raiz_percorrer->dir, Info); // percorre a direita, se houver
+        
 
         // Remoção na árvore binária de busca associada
-        operacao = remover_No_ArvBB(&((*Raiz)->info1.significados_ingles), Info);
+        operacao = remover_No_ArvBB(&(Raiz_percorrer->info1.significados_ingles), Info);
 
-        if (operacao == 2) {
-            printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_ser_excluida, (*Raiz)->info1.palavra_portugues);
+        if (operacao != 0) {
+            printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_utilizada, Raiz_percorrer->info1.palavra_portugues);
+            situacao = 1; //sucesso
         }
         
-        if ((*Raiz)->info1.significados_ingles == NULL) {
-            printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", (*Raiz)->info1.palavra_portugues);
-            situacao_da_arvore(NULL, Raiz, (*Raiz)->info1);
+        if (Raiz_percorrer->info1.significados_ingles == NULL) {
+            printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", Raiz_percorrer->info1.palavra_portugues);
+            operacao = situacao_da_arvore(NULL, Raiz, Raiz_percorrer->info1); //manda pra função intermediaria cuidar da remoção
+
+            if (operacao == 1) {
+                    printf("Palavra em português: %s removida com sucesso da árvore!\n", Raiz_percorrer->info2.palavra_portugues);
+            } else {
+                    printf("Erro ao tentar remover a palavra: %s\n", Raiz_percorrer->info2.palavra_portugues);
+                    situacao = 0; 
+            }
         }
 
-        if ((*Raiz)->n_infos == 2) {
-            operacao = remover_No_ArvBB(&((*Raiz)->info2.significados_ingles), Info);
+        if (Raiz_percorrer->n_infos == 2) {
 
-            if (operacao == 2) {
-                printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_ser_excluida, (*Raiz)->info2.palavra_portugues);
+            operacao = remover_No_ArvBB(&(Raiz_percorrer->info2.significados_ingles), Info);
+
+            if (operacao != 0) {
+                printf("Palavra em inglês: %s excluída com sucesso da palavra: %s\n", Info.palavra_utilizada, Raiz_percorrer->info2.palavra_portugues);
+                situacao = 1; //sucesso
             }
             
-            if ((*Raiz)->info2.significados_ingles == NULL) {
-                printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", (*Raiz)->info2.palavra_portugues);
-                situacao_da_arvore(NULL, Raiz, (*Raiz)->info2);
+            if (Raiz_percorrer->info2.significados_ingles == NULL) {
+                printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", Raiz_percorrer->info2.palavra_portugues);
+                operacao = situacao_da_arvore(NULL, Raiz, Raiz_percorrer->info2);
+
+                if (operacao == 1) {
+                    printf("Palavra em português: %s removida com sucesso da árvore!\n", Raiz_percorrer->info2.palavra_portugues);
+                } else {
+                    printf("Erro ao tentar remover a palavra: %s\n", Raiz_percorrer->info2.palavra_portugues);
+                    situacao = 0; 
+                }
             }
         }
+    }else{
+        situacao = 0; //Nenhuma palavra removida aqui
     }
+
+    return situacao; 
+}
+
+
+int buscar_documentar_caminho(Arv23Port *Raiz, inf_op Info, inf_op Infos_percurso[MAX_CAMINHO], int *tam_vetor) {
+    int encontrou = 0; // Inicializa como "não encontrado"
+
+    if (Raiz != NULL) {
+        int comparacao1 = strcmp(Info.palavra_utilizada, Raiz->info1.palavra_portugues);
+        int comparacao2 = 1; // Inicializa com valor padrão
+        if (Raiz->n_infos == 2) {
+            comparacao2 = strcmp(Info.palavra_utilizada, Raiz->info2.palavra_portugues);
+        }
+
+        // Verifica se encontrou a palavra
+        if (comparacao1 == 0) {
+            encontrou = 1; //encontrou
+        } else if (Raiz->n_infos == 2 && comparacao2 == 0) {
+            encontrou = 1; //encontrou
+        } else if (comparacao1 < 0) { // Percorre à esquerda
+            snprintf(Infos_percurso[*tam_vetor].palavra_utilizada, 100, "Estou percorrendo à esquerda de %s", Raiz->info1.palavra_portugues);
+            (*tam_vetor)++;
+            encontrou = buscar_documentar_caminho(Raiz->esq, Info, Infos_percurso, tam_vetor);
+        } else if (Raiz->n_infos == 1 || comparacao2 < 0) { // Percorre ao centro
+            snprintf(Infos_percurso[*tam_vetor].palavra_utilizada, 100, "Estou percorrendo pelo centro de %s", Raiz->info1.palavra_portugues);
+            (*tam_vetor)++;
+            encontrou = buscar_documentar_caminho(Raiz->cen, Info, Infos_percurso, tam_vetor);
+        } else { // Percorre à direita
+            snprintf(Infos_percurso[*tam_vetor].palavra_utilizada, 100, "Estou percorrendo pela direita de %s", Raiz->info2.palavra_portugues);
+            (*tam_vetor)++;
+            encontrou = buscar_documentar_caminho(Raiz->dir, Info, Infos_percurso, tam_vetor);
+        }
+    }
+
+    return encontrou;
 }
