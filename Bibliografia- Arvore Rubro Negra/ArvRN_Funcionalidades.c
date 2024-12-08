@@ -467,3 +467,24 @@ int buscar_documentar_caminho(ArvRNPort *Raiz, inf_op Info, inf_op Infos_percurs
 
     return encontrou; 
 }
+
+int buscar_sem_documentar(ArvRNPort *Raiz, inf_op Info) {
+    int encontrou = 0; // Inicializa como não encontrado
+
+    if (Raiz != NULL) {
+        int comparacao = strcmp(Info.palavra_utilizada, Raiz->info.palavra_portugues);
+
+        if (comparacao < 0) {
+            // Percorre à esquerda
+            encontrou = buscar_sem_documentar(Raiz->esq, Info);
+        } else if (comparacao > 0) {
+            // Percorre à direita
+            encontrou = buscar_sem_documentar(Raiz->dir, Info);
+        } else if (comparacao == 0) {
+            // Palavra encontrada
+            encontrou = 1;
+        }
+    }
+
+    return encontrou; 
+}
