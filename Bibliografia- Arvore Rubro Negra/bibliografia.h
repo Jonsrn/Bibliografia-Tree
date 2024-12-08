@@ -88,7 +88,7 @@ void imprimir_ArvRN(ArvRNPort *Raiz);
 int armazenar_NO_ArvRN(ArvRNPort *Raiz, inf_op Info, ArvRNPort **No_recuperado); //Função que busca e recupera o Nó
 int imprimir_infos_RN_por_unidade(ArvRNPort *Raiz, int unidade); //Imprime as informações pela unidade pesquisada
 int buscar_documentar_caminho(ArvRNPort *Raiz, inf_op Info, inf_op Infos_percurso[MAX_CAMINHO], int *tam_vetor); //Função pra realizar o teste de busca
-
+int buscar_sem_documentar(ArvRNPort *Raiz, inf_op Info); 
 
 //Funções de remoção da Rubro-Negra
 ArvRNPort *Remover_Menor(ArvRNPort *Raiz); //remove o menor valor
