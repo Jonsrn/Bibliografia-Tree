@@ -50,6 +50,8 @@ void testar_caminho_palavras(Arv23Port *Raiz){
                 operacao = 0; //Não encontrou
                 tam_vetor = 0;
 
+
+
                 snprintf(Infos_percurso[tam_vetor].palavra_utilizada, 100,"Iniciando busca da palavra %s", palavras_teste[i].palavra_utilizada);
                 tam_vetor++; 
 
@@ -58,12 +60,14 @@ void testar_caminho_palavras(Arv23Port *Raiz){
 
                 QueryPerformanceCounter(&inicio); //inicio
 
-                operacao = buscar_documentar_caminho(Raiz, palavras_teste[i], Infos_percurso, &tam_vetor);
+                  operacao = buscar_sem_documentar(Raiz, palavras_teste[i]);   
 
                  // fim da medição
                 QueryPerformanceCounter(&fim); //fim
 
                 //operações envolvendo arquivo e impressão ficam fora da medição, pois consomem tempo
+
+                operacao = buscar_documentar_caminho(Raiz, palavras_teste[i], Infos_percurso, &tam_vetor);
 
                 // Calcula o tempo em nanosegundos
                 long long tempo_nano = (fim.QuadPart - inicio.QuadPart) * 1000000000LL / freq.QuadPart;
