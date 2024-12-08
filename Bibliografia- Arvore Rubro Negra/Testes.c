@@ -5,10 +5,8 @@
 #include "bibliografia.h"
 
 
-
-
 //Essa função visa realizar a busca de 30 palavras em português, demonstrando o caminho e o tempo
-void testar_caminho_palavras(Arv23Port *Raiz){
+void testar_caminho_palavras(ArvRNPort *Raiz){
     int situacao, operacao; 
 
     if(Raiz != NULL){
@@ -51,7 +49,6 @@ void testar_caminho_palavras(Arv23Port *Raiz){
                 tam_vetor = 0;
 
 
-
                 snprintf(Infos_percurso[tam_vetor].palavra_utilizada, 100,"Iniciando busca da palavra %s", palavras_teste[i].palavra_utilizada);
                 tam_vetor++; 
 
@@ -60,7 +57,7 @@ void testar_caminho_palavras(Arv23Port *Raiz){
 
                 QueryPerformanceCounter(&inicio); //inicio
 
-                  operacao = buscar_sem_documentar(Raiz, palavras_teste[i]);   
+                  operacao = buscar_sem_documentar(Raiz, palavras_teste[i]); 
 
                  // fim da medição
                 QueryPerformanceCounter(&fim); //fim
@@ -115,4 +112,3 @@ void testar_caminho_palavras(Arv23Port *Raiz){
     mensagem_status_teste(situacao);
 
 }
-
