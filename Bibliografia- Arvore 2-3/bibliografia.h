@@ -76,7 +76,7 @@ int percorrer_remover_palavras_pela_unidade(ArvBB_ing *Raiz_percorrendo, ArvBB_i
 void excluir_palavras_correspondentes_ingles(Arv23Port **Raiz); //Item IV
 int imprimir_infos_23_por_unidade(Arv23Port *Raiz, int unidade); //Função pra imprimir todos as infos em ptbr e suas subárvores em ingles que correspondam a unidade
 void testar_caminho_palavras(Arv23Port *Raiz); //Função auxiliar dos testes de medição
-
+int remover_palavra_ingles_pela_unidade(Arv23Port **Raiz_original, Arv23Port *Raiz_percorrendo, inf_op Info); 
 
 //Protótipos das funções da árvore 2-3
 
@@ -88,11 +88,7 @@ Arv23Port *insereArv23(Arv23Port **no, InfArv23 Info, InfArv23 *promove, Arv23Po
 Arv23Port *quebraNo(Arv23Port **No, InfArv23 Info, InfArv23 *promove, Arv23Port *Filho); 
 int armazenar_No_ARV23(Arv23Port *Raiz, inf_op Info, Arv23Port **No_recuperado); //Essa função percorre a árvore 2-3 e recupera seu Nó
 int buscar_documentar_caminho(Arv23Port *Raiz, inf_op Info, inf_op Infos_percurso[MAX_CAMINHO], int *tam_vetor); 
-
-
-
-
-
+int buscar_sem_documentar(Arv23Port *Raiz, inf_op Info); 
 
 //Funções de remoção da arv23
 int remove_arv23(Arv23Port **Pai, Arv23Port **raiz, InfArv23 info); 
@@ -100,8 +96,8 @@ void menor_info_esquerda(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pa
 void menor_info_direita(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pai_no); 
 int situacao_da_arvore(Arv23Port **Pai, Arv23Port **Raiz, InfArv23 Info); 
 
-//Funções auxiliares da Arv23
-int remover_palavra_ingles_pela_unidade(Arv23Port **Raiz_original, Arv23Port *Raiz_percorrendo, inf_op Info); 
+
+
 
 
 //Protótipos das funções da árvore Binária
@@ -111,7 +107,6 @@ int inserir_ArvBB_Ingles(ArvBB_ing **Raiz, InfoBB info, ArvBB_ing **no_existente
 int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, int *tam_vetor); // Função que recupera os Nós correspondentes, pra impressão posterior.
 int menor_filho(ArvBB_ing *Raiz, ArvBB_ing **menor); //Função que vai recuperar o endereço do menor filho à direita
 int remover_No_ArvBB(ArvBB_ing **Raiz, inf_op informacoes); //Função que vai excluir a palavra em ingles da arvore, caso a unidade corresponda E a lista seja nula
-
 void imprimiArvBB(ArvBB_ing *no); 
 
 
@@ -121,18 +116,6 @@ int inserir_na_Lista(list_unid **Raiz, int unidade); //Função para inserir na 
 int buscando_unidade(list_unid *Raiz_Lista, int unidade_buscada); //Função de percorrer a Lista, em busca da unidade pesquisada. 
 int remover_unidade_lista(list_unid **Raiz_Lista, int unidade_buscada); // Função para remover a Unidade da Lista. 
 void imprimirLista(list_unid *lista); 
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
