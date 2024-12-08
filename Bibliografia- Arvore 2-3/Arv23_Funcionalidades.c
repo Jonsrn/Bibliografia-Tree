@@ -204,7 +204,7 @@ int armazenar_No_ARV23(Arv23Port *Raiz, inf_op Info, Arv23Port **No_recuperado){
                     resultado = armazenar_No_ARV23(Raiz->cen, Info, No_recuperado);   
 
                 }
-                //tem que comparar a info1 
+               
                 // caso não encontre, mandar pro centro
 
             }else{
@@ -603,3 +603,29 @@ int buscar_documentar_caminho(Arv23Port *Raiz, inf_op Info, inf_op Infos_percurs
 
     return encontrou;
 }
+
+int buscar_sem_documentar(Arv23Port *Raiz, inf_op Info) {
+    int encontrado = 0; // Inicializa como não encontrado
+
+    if (Raiz != NULL) {
+        int comparacao1 = strcmp(Info.palavra_utilizada, Raiz->info1.palavra_portugues);
+        int comparacao2 = 1; // Inicializa com valor padrão
+        if (Raiz->n_infos == 2) {
+            comparacao2 = strcmp(Info.palavra_utilizada, Raiz->info2.palavra_portugues);
+        }
+
+        // Verifica se encontrou a palavra
+        if (comparacao1 == 0 || (Raiz->n_infos == 2 && comparacao2 == 0)) {
+            encontrado = 1; // Palavra encontrada
+        } else if (comparacao1 < 0) { // Percorre à esquerda
+            encontrado = buscar_sem_documentar(Raiz->esq, Info);
+        } else if (Raiz->n_infos == 1 || comparacao2 < 0) { // Percorre ao centro
+            encontrado = buscar_sem_documentar(Raiz->cen, Info);
+        } else { // Percorre à direita
+            encontrado = buscar_sem_documentar(Raiz->dir, Info);
+        }
+    }
+
+    return encontrado; 
+}
+
