@@ -91,10 +91,32 @@ int buscar_documentar_caminho(Arv23Port *Raiz, inf_op Info, inf_op Infos_percurs
 int buscar_sem_documentar(Arv23Port *Raiz, inf_op Info); 
 
 //Funções de remoção da arv23
-int remove_arv23(Arv23Port **Pai, Arv23Port **raiz, InfArv23 info); 
-void menor_info_esquerda(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pai_no); 
-void menor_info_direita(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pai_no); 
-int situacao_da_arvore(Arv23Port **Pai, Arv23Port **Raiz, InfArv23 Info); 
+
+int situacao_da_arvore(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info); //Intermediaria pra Função de Remoção
+int Remover_Arv23(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info); //Função principal de remoção da arvore 2-3
+int RemoverInfo1Folha(Arv23Port **Raiz, Arv23Port **Pai); //Auxiliar que cuida de remover os casos que envolvem Info1 Folha
+int Remover_Info_Nao_Folha(Arv23Port **Raiz, int Localizacao); //Auxiliar que cuida de remover Infos que não estão em folhas
+int agregar_infos(Arv23Port **Raiz, int posicao); //Função auxiliar de agregação
+InfArv23 movimento_de_sub_arvore(Arv23Port **Raiz, int tipo_movimento, int *operacao); //Trata de fazer o movimento de Onda e recuperar o Menor/Maior valor, dependendo da situação
+int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int posicao); //Trata de tentar resolver situações onde anteriormente não era possivel, através de uma volta na recursão, subindo um nivel
+int contar_descendentes(Arv23Port *Raiz); //Contabiliza descendentes, conforme necessidade
+int Altura(Arv23Port *Raiz); //Calcula altura de sub-arvores, conforme necessidade
+int verificador_consistencia(Arv23Port *Raiz, Arv23Port **Pai); //Função que é chamada após uma remoção bem sucedida para verificar se a estrutura continua balanceada
+int auxiliar_reconstrucao(Arv23Port **Raiz); //Função chamada caso a árvore tenha desbalanceado
+int reconstruir_Arv(Arv23Port *Raiz, Arv23Port **Nova_Raiz); //Função que percorre a árvore original, reconstruindo uma nova balanceada
+void liberarArvore23(Arv23Port **Raiz); //Função que lida de apagar a árvore antiga totalmente
+
+
+
+
+ 
+ 
+
+
+
+
+
+
 
 
 
