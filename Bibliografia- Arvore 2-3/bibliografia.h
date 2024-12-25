@@ -66,9 +66,9 @@ void mensagem_status_teste(int situacao); //Função de diagnóstico dos testes
 
 
 
+
+
 //Protótipo das Funções auxiliares
-void adicionar_bibliografia(const char *filename, Arv23Port **Raiz);  //Função para importar o txt e preencher a árvore 2-3 e suas subsidiarias 
-int inserir_palavras_no_dicionario(Arv23Port **Raiz); 
 void imprimir_palavras_pela_unidade(Arv23Port *Raiz); //Função auxiliar da unidade I
 void imprimir_todos_significados_palavra_especifica(Arv23Port *Raiz); //Função do Item II
 void excluir_palavra_ingles_unidade(Arv23Port **Raiz); //Função referente ao Item III
@@ -111,6 +111,13 @@ void liberarArvore23(Arv23Port **Raiz); //Função que lida de apagar a árvore 
 
  
  
+//Protótipo das Funções de Montagem do Dataset
+void adicionar_bibliografia(const char *filename, Arv23Port **Raiz);  //Função para importar o txt e preencher a árvore 2-3 e suas subsidiarias 
+int inserir_palavras_no_dicionario(Arv23Port **Raiz); //Insere as palavras armazenadas nas estruturas
+int inserir_Arv23_Automatico(Arv23Port **Raiz, InfArv23 Info, int unidade, InfoBB Info_ingles); //Insere na arvore 2-3
+int inserir_ArvBB_Automatico(ArvBB_ing **Raiz, InfoBB Info, int unidade); //insere na sub-arvore em ingles
+int inserir_lista_automatico(list_unid **Raiz, int unidade); //insere a unidade no nó da sub-arvore em ingles
+
 
 
 
