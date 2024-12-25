@@ -222,7 +222,7 @@ void excluir_palavras_correspondentes_ingles(Arv23Port **Raiz) {
                 if(localizacao == 1){
                     //como operei com info1, verificar agr se a sub-árvore ficou NULA
                     if (No_encontrado->info1.significados_ingles == NULL) {
-                        resultado = remove_arv23(NULL, Raiz, No_encontrado->info1);
+                        resultado = Remover_Arv23(Raiz, NULL, No_encontrado->info1);
                     
                     }
 
@@ -237,7 +237,7 @@ void excluir_palavras_correspondentes_ingles(Arv23Port **Raiz) {
                 }else if(localizacao == 2){
                     //como operei com info2, verificar agr se a sub-árvore ficou NULA
                     if (No_encontrado->info2.significados_ingles == NULL) {
-                        resultado = remove_arv23(NULL, Raiz, No_encontrado->info2); //verificar esse retorno aqui
+                        resultado = Remover_Arv23(Raiz, NULL, No_encontrado->info2);
                     
                     }
 

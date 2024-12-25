@@ -328,180 +328,7 @@ int imprimir_infos_23_por_unidade(Arv23Port *Raiz, int unidade){
     return situacao; 
 }
 
-//Funções de remoção 
 
-void menor_info_direita(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pai_no) {
-    // Vai até o extremo esquerdo da subárvore direita
-    *pai_no = no;
-
-    while (no->esq != NULL) {
-        *pai_no = no;
-        no = no->esq;
-    }
-
-    *no_resultado = no;
-}
-
-void menor_info_esquerda(Arv23Port *no, Arv23Port **no_resultado, Arv23Port **pai_no) {
-    // Vai até o extremo direito da subárvore esquerda
-    *pai_no = no;
-
-    while (no->dir != NULL) {
-        *pai_no = no;
-        no = no->dir;
-    }
-
-    *no_resultado = no;
-}
-
-
-
-int remove_arv23(Arv23Port **Pai, Arv23Port **raiz, InfArv23 info) {
-    int removido = 0;
-    Arv23Port *no = NULL, *no1, *pai_no = NULL, *pai_no1 = NULL, **aux;
-    aux = (Arv23Port **)malloc(sizeof(Arv23Port *));
-    no1 = (Arv23Port *)malloc(sizeof(Arv23Port));
-
-    if (*raiz != NULL) {
-        if (ehfolha(*raiz)) {
-            if ((*raiz)->n_infos == 2) {
-                if (strcmp(info.palavra_portugues, (*raiz)->info2.palavra_portugues) == 0) {
-                    (*raiz)->n_infos = 1;
-                    removido = 1;
-                } else if (strcmp(info.palavra_portugues, (*raiz)->info1.palavra_portugues) == 0) {
-                    (*raiz)->info1 = (*raiz)->info2;
-                    (*raiz)->n_infos = 1;
-                    removido = 1;
-                }
-            } else if (strcmp(info.palavra_portugues, (*raiz)->info1.palavra_portugues) == 0) {
-                if (*Pai == NULL) {
-                    //isso vai ser feito externamente
-                    removido = 4;
-                } else if (*raiz == (*Pai)->esq) {
-                    (*raiz)->info1 = (*Pai)->info1;
-                    pai_no = *Pai;
-                    menor_info_direita((*Pai)->cen, &no, &pai_no);
-                    (*Pai)->info1 = no->info1;
-                    removido = 1;
-
-                    if (no->n_infos == 2) {
-                        no->info1 = no->info2;
-                        no->n_infos = 1;
-                    } else {
-                        if (pai_no->n_infos == 1) {
-                            (*raiz)->info2 = no->info1;
-                            (*raiz)->n_infos = 2;
-                            free(no);
-                            *Pai = *raiz;
-                        } else {
-                            no->info1 = pai_no->info2;
-                            pai_no1 = pai_no;
-                            menor_info_direita(pai_no->dir, &no1, &pai_no1);
-                            pai_no->info2 = no1->info1;
-
-                            if (no1->n_infos == 2) {
-                                no1->info1 = no1->info2;
-                                no1->n_infos = 1;
-                            } else {
-                                no->info2 = pai_no->info2;
-                                no->n_infos = 2;
-                                pai_no->n_infos = 1;
-                                free(no1);
-                                pai_no1->dir = NULL;
-                            }
-                        }
-                    }
-                } else if (*raiz == (*Pai)->cen) {
-                    removido = 1;
-                    if ((*Pai)->n_infos == 1) {
-                        if (((*Pai)->esq)->n_infos == 2) {
-                            (*raiz)->info1 = (*Pai)->info1;
-                            (*Pai)->info1 = ((*Pai)->esq)->info2;
-                            ((*Pai)->esq)->n_infos = 1;
-                        } else {
-                            ((*Pai)->esq)->info2 = (*Pai)->info1;
-                            free(*raiz);
-                            ((*Pai)->esq)->n_infos = 2;
-                            *aux = (*Pai)->esq;
-                            free(*Pai);
-                            *Pai = *aux;
-                        }
-                    } else {
-                        (*raiz)->info1 = (*Pai)->info2;
-                        pai_no = *Pai;
-                        menor_info_direita((*Pai)->dir, &no, &pai_no);
-                        (*Pai)->info2 = no->info1;
-
-                        if (no->n_infos == 2) {
-                            no->info1 = no->info2;
-                            no->n_infos = 1;
-                        } else {
-                            (*raiz)->n_infos = 2;
-                            (*raiz)->info2 = (*Pai)->info2;
-                            (*Pai)->n_infos = 1;
-                            free(no);
-                            (*Pai)->dir = NULL;
-                        }
-                    }
-                } else {
-                    removido = 1;
-                    pai_no = *Pai;
-                    menor_info_esquerda((*Pai)->cen, &no, &pai_no);
-
-                    if (no->n_infos == 1) {
-                        no->info2 = (*Pai)->info2;
-                        (*Pai)->n_infos = 1;
-                        no->n_infos = 2;
-                        free(*raiz);
-                        *raiz = NULL;
-                    } else {
-                        (*raiz)->info1 = (*Pai)->info2;
-                        (*Pai)->info2 = no->info2;
-                        no->n_infos = 1;
-                    }
-                }
-            }
-        } else {
-            if (strcmp(info.palavra_portugues, (*raiz)->info1.palavra_portugues) < 0) {
-                removido = remove_arv23(raiz, &(*raiz)->esq, info);
-            } else if (strcmp(info.palavra_portugues, (*raiz)->info1.palavra_portugues) == 0) {
-                pai_no = *raiz;
-                menor_info_direita((*raiz)->cen, &no, &pai_no);
-                (*raiz)->info1 = no->info1;
-                remove_arv23(raiz, &(*raiz)->cen, (*raiz)->info1);
-                removido = 1;
-            } else if (((*raiz)->n_infos == 1) || (strcmp(info.palavra_portugues, (*raiz)->info2.palavra_portugues) < 0)) {
-                removido = remove_arv23(raiz, &(*raiz)->cen, info);
-            } else if (strcmp(info.palavra_portugues, (*raiz)->info2.palavra_portugues) == 0) {
-                pai_no = *Pai;
-                menor_info_direita((*Pai)->dir, &no, &pai_no);
-                (*raiz)->info2 = no->info1;
-                remove_arv23(raiz, &(*raiz)->dir, (*raiz)->info2);
-                removido = 1;
-            } else {
-                removido = remove_arv23(raiz, &(*raiz)->dir, info);
-            }
-        }
-    }
-
-    return removido; //0 significa que não foi removido, 1 que removeu
-}
-
-
-//Função intermediaria pra remover a raiz propriamente
-int situacao_da_arvore(Arv23Port **Pai, Arv23Port **Raiz, InfArv23 Info) {
-    int resposta = 0;
-
-    if ((*Raiz)->n_infos == 1 && (*Raiz)->esq == NULL) { 
-       free(*Raiz); 
-       *Raiz = NULL; 
-       resposta = 1;  
-    } else {
-       resposta = remove_arv23(Pai, Raiz, Info); 
-    }
-
-    return resposta; 
-}
 
 
 //Função referente ao item III, remover a ingles correspondente, e com aquela unidade 
@@ -509,6 +336,7 @@ int remover_palavra_ingles_pela_unidade(Arv23Port **Raiz, Arv23Port *Raiz_percor
     int situacao;
 
     if (Raiz_percorrer != NULL) {
+        InfArv23 temporaria; 
         int operacao;
         situacao = 0; //inicia zerado 
 
@@ -531,13 +359,15 @@ int remover_palavra_ingles_pela_unidade(Arv23Port **Raiz, Arv23Port *Raiz_percor
         }
         
         if (Raiz_percorrer->info1.significados_ingles == NULL) {
-            printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", Raiz_percorrer->info1.palavra_portugues);
-            operacao = situacao_da_arvore(NULL, Raiz, Raiz_percorrer->info1); //manda pra função intermediaria cuidar da remoção
+            
+            temporaria = Raiz_percorrer->info1; 
+            printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", temporaria.palavra_portugues);
+            operacao = situacao_da_arvore(Raiz, NULL, Raiz_percorrer->info1); //manda pra função intermediaria cuidar da remoção
 
             if (operacao == 1) {
-                    printf("Palavra em português: %s removida com sucesso da árvore!\n", Raiz_percorrer->info2.palavra_portugues);
+                    printf("Palavra em português: %s removida com sucesso da árvore!\n", temporaria.palavra_portugues);
             } else {
-                    printf("Erro ao tentar remover a palavra: %s\n", Raiz_percorrer->info2.palavra_portugues);
+                    printf("Não foi possivel remover a palavra: %s\n", temporaria.palavra_portugues);
                     situacao = 0; 
             }
         }
@@ -552,13 +382,15 @@ int remover_palavra_ingles_pela_unidade(Arv23Port **Raiz, Arv23Port *Raiz_percor
             }
             
             if (Raiz_percorrer->info2.significados_ingles == NULL) {
-                printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", Raiz_percorrer->info2.palavra_portugues);
-                operacao = situacao_da_arvore(NULL, Raiz, Raiz_percorrer->info2);
+                temporaria = Raiz_percorrer->info2; 
+
+                printf("Como a Palavra em português: %s não possui mais correspondentes em inglês, a mesma foi excluída\n", temporaria.palavra_portugues);
+                operacao = situacao_da_arvore(Raiz, NULL, Raiz_percorrer->info2);
 
                 if (operacao == 1) {
-                    printf("Palavra em português: %s removida com sucesso da árvore!\n", Raiz_percorrer->info2.palavra_portugues);
+                    printf("Palavra em português: %s removida com sucesso da árvore!\n", temporaria.palavra_portugues);
                 } else {
-                    printf("Erro ao tentar remover a palavra: %s\n", Raiz_percorrer->info2.palavra_portugues);
+                    printf("Não foi possivel remover a palavra: %s\n", temporaria.palavra_portugues);
                     situacao = 0; 
                 }
             }

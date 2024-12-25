@@ -118,53 +118,40 @@ void adicionar_bibliografia(const char *filename, Arv23Port **Raiz) {
      mensagem_status_montagem_dataset(situacao);   
 }
 
+// Função para inserir as palavras do vetor na árvore RN e nas subestruturas associadas
+int inserir_palavras_no_dicionario(Arv23Port **Raiz) {
+    int situacao; 
 
-
-
-
-
-
-//aqui ficará a função de inserção na lista. 
-
-int inserir_lista_automatico(list_unid **Raiz, int unidade){
-    int operacao, situacao; 
-    situacao = 1; //1 significa que deu certo
-
-    operacao =  inserir_na_Lista(Raiz, unidade); 
-
-    if(operacao == 0){
-       //Unidade já presente na lista
-       situacao = 3;  
-    }else if(operacao == 2){
-       //A alocação do Nó na Lista falhou
-       situacao = 2;  
-    }
-
-   return situacao; //3 significa que o numero já existe na lista, 1 significa que deu certo e 2 que a alocação falhou
-}
-
-int inserir_ArvBB_Automatico(ArvBB_ing **Raiz, InfoBB Info, int unidade){
-    int operacao, situacao; 
-    situacao = 1; //1 indica sucesso 
-    
-    ArvBB_ing *no_existente; 
-    no_existente = NULL; //Isso daqui serve para após inserir, ter acesso ao endereço do Nó, pra inserções subsequentes em sua sublista
-
-    operacao = inserir_ArvBB_Ingles(Raiz, Info, &no_existente); 
-    
-    //Nos retornos, 0 significa falhou totalmente (alocação), 1 significa que deu certo criar um novo nó e inseri-lo, e 2 significa que o Nó já existe. 
-    //Independente se o Nó é novo ou antigo, o recuperamos, para poder fazer a inserção em sua lista
-
-    if(operacao != 0){
-        situacao = inserir_lista_automatico(&(no_existente->info.unidades), unidade); 
-        //Nos retornos aqui, 2 significa que a alocação falhou, 1 que deu certo, e 3 que o número já existe nessa lista
-    }else{
-        //Falha na alocação do Nó da Arvore Binária
-        situacao = 4; 
+    if (*Raiz == NULL) {
        
+        for (int i = 0; i < contador_palavras; i++) {
+            int unidade = palavras_importadas[i].unidade; // Unidade atual associada
+
+            for (int j = 0; j < palavras_importadas[i].num_traducoes; j++) {
+                // Obtém a palavra em inglês e suas traduções
+                InfoBB info_ing;
+                strncpy(info_ing.palavra_ingles, palavras_importadas[i].palavra_ingles, sizeof(info_ing.palavra_ingles) - 1);
+                info_ing.palavra_ingles[sizeof(info_ing.palavra_ingles) - 1] = '\0';
+                info_ing.unidades = NULL; // Inicializa a lista de unidades
+
+                // Define a palavra em português
+                InfArv23 info_port;
+                strncpy(info_port.palavra_portugues, palavras_importadas[i].palavras_portugues[j], sizeof(info_port.palavra_portugues) - 1);
+                info_port.palavra_portugues[sizeof(info_port.palavra_portugues) - 1] = '\0';
+                info_port.significados_ingles = NULL; // Inicializa a árvore binária para significados em inglês
+
+                // Insere a palavra em português com seu significado em inglês e unidade na árvore 2-3
+                situacao = inserir_Arv23_Automatico(Raiz, info_port, unidade, info_ing); 
+
+                if (situacao == 0 || situacao == 2 || situacao == 4 || situacao == 5) {
+                    //algo deu errado
+                    break;
+                }
+            }
+        }
     }
 
-    return situacao; 
+   return situacao;     
 
 }
 
@@ -204,6 +191,51 @@ int inserir_Arv23_Automatico(Arv23Port **Raiz, InfArv23 Info, int unidade, InfoB
 
 } 
 
+int inserir_ArvBB_Automatico(ArvBB_ing **Raiz, InfoBB Info, int unidade){
+    int operacao, situacao; 
+    situacao = 1; //1 indica sucesso 
+    
+    ArvBB_ing *no_existente; 
+    no_existente = NULL; //Isso daqui serve para após inserir, ter acesso ao endereço do Nó, pra inserções subsequentes em sua sublista
+
+    operacao = inserir_ArvBB_Ingles(Raiz, Info, &no_existente); 
+    
+    //Nos retornos, 0 significa falhou totalmente (alocação), 1 significa que deu certo criar um novo nó e inseri-lo, e 2 significa que o Nó já existe. 
+    //Independente se o Nó é novo ou antigo, o recuperamos, para poder fazer a inserção em sua lista
+
+    if(operacao != 0){
+        situacao = inserir_lista_automatico(&(no_existente->info.unidades), unidade); 
+        //Nos retornos aqui, 2 significa que a alocação falhou, 1 que deu certo, e 3 que o número já existe nessa lista
+    }else{
+        //Falha na alocação do Nó da Arvore Binária
+        situacao = 4; 
+       
+    }
+
+    return situacao; 
+
+}
+
+
+//aqui ficará a função de inserção na lista. 
+
+int inserir_lista_automatico(list_unid **Raiz, int unidade){
+    int operacao, situacao; 
+    situacao = 1; //1 significa que deu certo
+
+    operacao =  inserir_na_Lista(Raiz, unidade); 
+
+    if(operacao == 0){
+       //Unidade já presente na lista
+       situacao = 3;  
+    }else if(operacao == 2){
+       //A alocação do Nó na Lista falhou
+       situacao = 2;  
+    }
+
+   return situacao; //3 significa que o numero já existe na lista, 1 significa que deu certo e 2 que a alocação falhou
+}
+
 
 
 
@@ -211,43 +243,6 @@ int inserir_Arv23_Automatico(Arv23Port **Raiz, InfArv23 Info, int unidade, InfoB
 
  
 
-
-// Função para inserir as palavras do vetor na árvore RN e nas subestruturas associadas
-int inserir_palavras_no_dicionario(Arv23Port **Raiz) {
-    int situacao; 
-
-    if (*Raiz == NULL) {
-       
-        for (int i = 0; i < contador_palavras; i++) {
-            int unidade = palavras_importadas[i].unidade; // Unidade atual associada
-
-            for (int j = 0; j < palavras_importadas[i].num_traducoes; j++) {
-                // Obtém a palavra em inglês e suas traduções
-                InfoBB info_ing;
-                strncpy(info_ing.palavra_ingles, palavras_importadas[i].palavra_ingles, sizeof(info_ing.palavra_ingles) - 1);
-                info_ing.palavra_ingles[sizeof(info_ing.palavra_ingles) - 1] = '\0';
-                info_ing.unidades = NULL; // Inicializa a lista de unidades
-
-                // Define a palavra em português
-                InfArv23 info_port;
-                strncpy(info_port.palavra_portugues, palavras_importadas[i].palavras_portugues[j], sizeof(info_port.palavra_portugues) - 1);
-                info_port.palavra_portugues[sizeof(info_port.palavra_portugues) - 1] = '\0';
-                info_port.significados_ingles = NULL; // Inicializa a árvore binária para significados em inglês
-
-                // Insere a palavra em português com seu significado em inglês e unidade na árvore 2-3
-                situacao = inserir_Arv23_Automatico(Raiz, info_port, unidade, info_ing); 
-
-                if (situacao == 0 || situacao == 2 || situacao == 4 || situacao == 5) {
-                    //algo deu errado
-                    break;
-                }
-            }
-        }
-    }
-
-   return situacao;     
-
-}
 
 
 
