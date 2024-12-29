@@ -102,6 +102,25 @@ int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, 
     
 }
 
+//Item I
+void imprimir_palavras_correspondentes(ArvBB_ing *Raiz, inf_op Info, int *encontrado){
+    if(Raiz != NULL){
+     imprimir_palavras_correspondentes(Raiz->esq, Info, encontrado);
+     
+     if(buscando_unidade(Raiz->info.unidades, Info.unidade)){
+          if(*encontrado == 0){
+               (*encontrado) = 1; //atualiza, já que precisa imprimir a palavra em portugues apenas uma vez. 
+               printf("A palavra em português '%s' possui as seguintes palavras correspondentes na unidade '%d':\n", Info.palavra_utilizada, Info.unidade);
+          }
+          printf("%s\n", Raiz->info.palavra_ingles); 
+     }
+
+     imprimir_palavras_correspondentes(Raiz->dir, Info, encontrado); 
+
+    }
+
+}
+
 void imprimiArvBB(ArvBB_ing *no) {
     if (no != NULL) {
         imprimiArvBB(no->esq);
