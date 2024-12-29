@@ -137,7 +137,7 @@ int inserir_ArvRN_Portugues(ArvRNPort **Raiz, InfArvRN Info, ArvRNPort **No_exis
              operacao = 0; // Indica falha na alocação
           } else {
              *Raiz = novo_no;
-             *No_existente = *Raiz; // Retorna o endereço do novo nó
+             *No_existente = *Raiz; // Recupera o endereço do novo nó
              operacao = 1; 
         } 
     }else{
@@ -223,31 +223,21 @@ int armazenar_NO_ArvRN(ArvRNPort *Raiz, inf_op Info, ArvRNPort **No_recuperado){
 }
 
 int imprimir_infos_RN_por_unidade(ArvRNPort *Raiz, int unidade){
-    int situacao = 2; //não encontrou 
+    int situacao = 0; //não encontrou 
     if(Raiz != NULL){
-        ArvBB_ing **vetor_ingles; 
-        int tamanho_vetor, resultado; 
-        vetor_ingles = NULL;
-        tamanho_vetor = 0;  
+        int resultado;
+        inf_op Info; 
 
         situacao |= imprimir_infos_RN_por_unidade(Raiz->esq, unidade); 
 
-        resultado = Armazenar_No_ARVBB(Raiz->info.significados_ingles, unidade, &vetor_ingles, &tamanho_vetor); 
+        resultado = 0; //inicia zerado
 
-        if(resultado == 1 && tamanho_vetor != 0){
-           
-            printf("A palavra em português '%s' possui as seguintes palavras correspondentes na unidade '%d':\n", Raiz->info.palavra_portugues, unidade);
-            
-            for(int i = 0; i < tamanho_vetor; i++){
-                printf("Palavra: %s\n", vetor_ingles[i]->info.palavra_ingles); 
-            }
-            situacao = 1; //pelo menos uma correspondencia foi encontrada
+        Info.unidade = unidade; 
+        strcpy(Info.palavra_utilizada, Raiz->info.palavra_portugues);  
 
+        imprimir_palavras_correspondentes(Raiz->info.significados_ingles, Info, &resultado);
 
-           
-        }
-        //após imprimir, libera a linkagem linear 
-        free(vetor_ingles);
+        situacao |= resultado;          
 
         situacao |= imprimir_infos_RN_por_unidade(Raiz->dir, unidade); 
 
