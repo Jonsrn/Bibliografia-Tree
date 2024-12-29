@@ -9,7 +9,7 @@
 //Item (I)  informar uma unidade e então imprima todas as palavras da unidade em português seguida das equivalentes em inglês;
 
 void imprimir_palavras_pela_unidade(ArvRNPort *Raiz){
-    int situacao = 0; 
+    int situacao, operacao; 
     if(Raiz != NULL){
         int confirmacao, unidade; 
         confirmacao = 0; 
@@ -32,11 +32,18 @@ void imprimir_palavras_pela_unidade(ArvRNPort *Raiz){
          
         
 
-       situacao = imprimir_infos_RN_por_unidade(Raiz, unidade);  
+       operacao = imprimir_infos_RN_por_unidade(Raiz, unidade); 
 
+       if(operacao == 0){
+          //Não encontrou nenhuma palavra naquela Unidade
+          situacao = 2;
+       }
                
         
 
+    }else{
+        //arvore vazia
+        situacao = 0; 
     }
 
     mensagem_status_impressao_unidade(situacao); 
@@ -124,7 +131,7 @@ void excluir_palavra_ingles_unidade(ArvRNPort **Raiz) {
             }
         } while (confirmacao == 0);
 
-       operacao = remover_palavra_ingles_pela_unidade(Raiz, *Raiz, Informacao); //mudar o retorno aqui
+       operacao = remover_palavra_ingles_pela_unidade(Raiz, *Raiz, Informacao);
 
        if(operacao == 1){
            //Operação concluida com sucesso
