@@ -137,6 +137,7 @@ int Armazenar_No_ARVBB(ArvBB_ing *Raiz, int unidade, ArvBB_ing ***vetor_ingles, 
 int menor_filho(ArvBB_ing *Raiz, ArvBB_ing **menor); //Função que vai recuperar o endereço do menor filho à direita
 int remover_No_ArvBB(ArvBB_ing **Raiz, inf_op informacoes); //Função que vai excluir a palavra em ingles da arvore, caso a unidade corresponda E a lista seja nula
 void imprimiArvBB(ArvBB_ing *no); 
+void imprimir_palavras_correspondentes(ArvBB_ing *Raiz, inf_op Info, int *encontrado); 
 
 
 //Protótipo das funções da Lista Encadeada
