@@ -250,44 +250,26 @@ int armazenar_No_ARV23(Arv23Port *Raiz, inf_op Info, Arv23Port **No_recuperado){
 
 //Funções referentes ao Item I
 
-void imprimir_info(const char *palavra_portugues, ArvBB_ing **vetor, int tamanho, int unidade) {
-    printf("A palavra em português '%s' possui as seguintes palavras correspondentes na unidade '%d':\n", palavra_portugues, unidade);
-    for (int i = 0; i < tamanho; i++) {
-        printf("Palavra: %s\n", vetor[i]->info.palavra_ingles); 
-    }
-}
-
 int imprimir_infos_23_por_unidade(Arv23Port *Raiz, int unidade){
     int situacao;     
     if(Raiz !=NULL){
-        ArvBB_ing **vetor_inglesInfo1, **vetor_inglesInfo2; 
-        int tamanho_vetor1, tamanho_vetor2, resultado; 
-        vetor_inglesInfo1 = NULL; 
-        vetor_inglesInfo2 = NULL; 
-        tamanho_vetor1 = 0; 
-        tamanho_vetor2 = 0; 
+        int resultado;
+        inf_op Info;  
         situacao = 0; //inicia zerado
         
         
-         situacao |= imprimir_infos_23_por_unidade(Raiz->esq, unidade); //manda pra esquerda
+        situacao |= imprimir_infos_23_por_unidade(Raiz->esq, unidade); //manda pra esquerda
 
         //como temos info1, mandaremos agr pra imprimir a ArvBB interna
         resultado = 0; //inicia zerado
 
+        Info.unidade = unidade; 
+        strcpy(Info.palavra_utilizada, Raiz->info1.palavra_portugues);  
+        resultado = 0; //inicia zerado
 
-        resultado = Armazenar_No_ARVBB(Raiz->info1.significados_ingles, unidade, &vetor_inglesInfo1, &tamanho_vetor1); 
+        imprimir_palavras_correspondentes(Raiz->info1.significados_ingles, Info, &resultado);
 
-        if(resultado == 1){
-            if(tamanho_vetor1 != 0){
-                imprimir_info(Raiz->info1.palavra_portugues, vetor_inglesInfo1, tamanho_vetor1, unidade);
-                situacao = 1; //encontrou
-            }    
-        }
-
-        //após imprimir, libera a linkagem linear
-        if(vetor_inglesInfo1 != NULL){
-            free(vetor_inglesInfo1);
-        } 
+        situacao |= resultado;        
         
 
         
@@ -298,19 +280,14 @@ int imprimir_infos_23_por_unidade(Arv23Port *Raiz, int unidade){
         if(Raiz->n_infos == 2){
             resultado = 0;
             //Nesse caso, como há Info2, precisamos repetir o processo e percorrer sua subárvore
-            resultado = Armazenar_No_ARVBB(Raiz->info2.significados_ingles, unidade, &vetor_inglesInfo2, &tamanho_vetor2); 
+            resultado = 0; //inicia novamente zerado
 
-            if(resultado == 1){
-                if(tamanho_vetor2 != 0){
-                    imprimir_info(Raiz->info2.palavra_portugues, vetor_inglesInfo2, tamanho_vetor2, unidade);
-                    situacao = 1; //encontrou
-                }    
-            }
+            strcpy(Info.palavra_utilizada, Raiz->info2.palavra_portugues);  
+            resultado = 0; //inicia novamente zerado
 
-            //após imprimir a info2, liberamos a linkagem linear
-            if(vetor_inglesInfo2 != NULL){
-                free(vetor_inglesInfo2); 
-            }
+            imprimir_palavras_correspondentes(Raiz->info2.significados_ingles, Info, &resultado);
+
+            situacao |= resultado;           
            
         }  
 
