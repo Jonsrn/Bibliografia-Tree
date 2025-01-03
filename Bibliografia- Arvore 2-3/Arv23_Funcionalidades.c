@@ -10,7 +10,6 @@ Arv23Port *criarNoArv23(InfArv23 Info, Arv23Port *Filho_Esq, Arv23Port *Filho_Ce
     Arv23Port *Novo_no = (Arv23Port *)malloc(sizeof(Arv23Port));
   
     if (Novo_no != NULL) {    
-        memset(Novo_no, 0, sizeof(Arv23Port)); // Zera para evitar lixo
         Novo_no->info1 = Info;
         Novo_no->esq = Filho_Esq;
         Novo_no->cen = Filho_Cent;
