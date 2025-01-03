@@ -97,7 +97,8 @@ int Remover_Arv23(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info); //Função 
 int RemoverInfo1Folha(Arv23Port **Raiz, Arv23Port **Pai); //Auxiliar que cuida de remover os casos que envolvem Info1 Folha
 int Remover_Info_Nao_Folha(Arv23Port **Raiz, int Localizacao); //Auxiliar que cuida de remover Infos que não estão em folhas
 int agregar_infos(Arv23Port **Raiz, int posicao); //Função auxiliar de agregação
-InfArv23 movimento_de_sub_arvore(Arv23Port **Raiz, int tipo_movimento, int *operacao); //Trata de fazer o movimento de Onda e recuperar o Menor/Maior valor, dependendo da situação
+InfArv23 Pegar_Menor(Arv23Port *Raiz, int *operacao); //Recupera a menor Informação
+InfArv23 Pegar_Maior(Arv23Port *Raiz, int *operacao); //Recupera a Maior Informação
 int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int posicao); //Trata de tentar resolver situações onde anteriormente não era possivel, através de uma volta na recursão, subindo um nivel
 int contar_descendentes(Arv23Port *Raiz); //Contabiliza descendentes, conforme necessidade
 int Altura(Arv23Port *Raiz); //Calcula altura de sub-arvores, conforme necessidade
