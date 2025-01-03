@@ -12,7 +12,6 @@ ArvRNPort *criar_no_ArvRN(InfArvRN Info){
 
     novo_no = (ArvRNPort*)malloc(sizeof(ArvRNPort));
     if(novo_no != NULL){
-        memset(novo_no, 0, sizeof(ArvRNPort));  //zera o lixo da memória
         strcpy(novo_no->info.palavra_portugues, Info.palavra_portugues); // Copia a string 
         novo_no->cor = VERMELHO; 
         novo_no->info.significados_ingles = NULL; 

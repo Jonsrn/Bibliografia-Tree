@@ -26,207 +26,48 @@ int contar_descendentes(Arv23Port *Raiz){
 }
 
 
-
-InfArv23 movimento_de_sub_arvore(Arv23Port **Raiz, int tipo_movimento, int *operacao){
-    InfArv23 Valor; 
-    int qtd_descendentes, nova_operacao;
-    nova_operacao = 0;   
-    *operacao = 0; 
-
-
-    if(*Raiz != NULL){
-        if(tipo_movimento == 1){
-            //1 significa que buscaremos o menor valor
-
-            if(ehfolha ((*Raiz)->esq)){
-                //A esquerda da minha direita é folha
-                if((*Raiz)->esq->n_infos == 2){
-                    //A esqueda Folha tem duas Infos, pegamos a Menor, e a Maior se torna Info1
-                    Valor = (*Raiz)->esq->info1; //O retorno recebe o menor valor
-                    (*Raiz)->esq->info1 = (*Raiz)->esq->info2; //A Info2 do Nó passa a ser a Info1
-                    (*Raiz)->esq->n_infos = 1; //Numero de Infos do Nó é atualizado 
-                    *operacao = 1;
-                }else{
-                    //A esquerda da Sub-arvore não possui dois filhos, partiremos pra outras manipulações
-                    if((*Raiz)->n_infos == 2){
-                        //A Raiz da sub-arvore possui duas Infos, é sinal de que possui 3 Filhos
-                        //Olhamos no Centro primeiro
-                        if((*Raiz)->cen->n_infos == 2){
-                            //O filho do Centro possui duas Infos
-                            Valor = (*Raiz)->esq->info1; //O retorno recebe o menor valor
-                            (*Raiz)->esq->info1 = (*Raiz)->info1; //A info1 da Raiz desce para ser a Info1 da Esquerda
-                            (*Raiz)->info1 = (*Raiz)->cen->info1; //A Info1 do Centro sobe para se tornar a Info1 da Raiz
-                            (*Raiz)->cen->info1 = (*Raiz)->cen->info2; //A Info2 do Centro passa a ser a Info1
-                            (*Raiz)->cen->n_infos = 1; //Numero de Infos do Centro é atualizado
-                            *operacao = 1;
-
-                        }else{
-                           //O centro também não possui duas Infos, então, olharemos pra direita
-                           if((*Raiz)->dir->n_infos == 2){
-                               //A direita possui duas Infos, então, dá pra fazer o Movimento da Onda
-                               Valor = (*Raiz)->esq->info1; //O retorno recebe o menor valor
-                               (*Raiz)->esq->info1 = (*Raiz)->info1; //A Info1 da Raiz desce para ser a nova Info1 da Esquerda
-                               (*Raiz)->info1 = (*Raiz)->cen->info1; //A info1 do Centro sobe para ser a nova Info1 da Raiz
-                               (*Raiz)->cen->info1 = (*Raiz)->info2; //A info2 da Raiz desce para ser a Nova Info1 do Centro
-                               (*Raiz)->info2 = (*Raiz)->dir->info1; //A info1 da Direita sobe para ser a Nova Info2 da Raiz
-                               (*Raiz)->dir->info1 = (*Raiz)->dir->info2; //A info2 da direita, se torna a nova Info1 da direita
-                               (*Raiz)->dir->n_infos = 1; //Numero de Infos é atualizado
-                               *operacao = 1;
-                           }else{
-                              //A direita também não possui duas Infos, agruparemos então
-                              
-                              Valor = (*Raiz)->esq->info1; //O retorno recebe o menor valor
-                              (*Raiz)->esq->info1 = (*Raiz)->info1; //A Info1 da Raiz desce para ser a Nova Info1 da Esquerda
-                              (*Raiz)->info1 = (*Raiz)->cen->info1; //A Info1 do Centro sobe para se tornar a Nova Info1 da Raiz
-                              (*Raiz)->cen->info1 = (*Raiz)->info2; //A Info2 da Raiz desce e passa a ser a Info1 do Centro
-                              (*Raiz)->cen->info2 = (*Raiz)->dir->info1; //Agrupa, a Info1 da Direita passa a ser a Info1 do Centro
-                              (*Raiz)->cen->n_infos = 2; //Numero de Infos do Centro é atualizado
-                              (*Raiz)->n_infos = 1; //Numero de Infos da Raiz é atualizada
-                              free((*Raiz)->dir); //Libera o Nó da Direita da Raiz
-                              (*Raiz)->dir = NULL; //Direita se torna Nula
-                              *operacao = 1;
-
-                           }
-
-                        }
-                    }
-                }
-            }else{ 
-               //A Raiz da Esquerda não é folha
-
-               qtd_descendentes = contar_descendentes((*Raiz)->esq); 
-
-               if(qtd_descendentes > 3){
-                    Valor = movimento_de_sub_arvore(&((*Raiz)->esq), 1, &nova_operacao);
-                    *operacao = nova_operacao; //O retorno da operação recursiva se torna o resultado atual da operação 
-               }else if(qtd_descendentes == 3){
-                   Valor = (*Raiz)->esq->esq->info1; 
-                   (*Raiz)->esq->info2 = (*Raiz)->esq->cen->info1; //Info1 do Centro da esquerda sobe e se torna a Info2, agregação
-                   (*Raiz)->esq->n_infos = 2; //Numero de Infos é atualizado pra 2
-                   free((*Raiz)->esq->esq); //Liberada a esquerda da esquerda
-                   free((*Raiz)->esq->cen); //Liberado o Centro da Esquerda
-                   (*Raiz)->esq->esq = NULL; //A esquerda da esquerda se torna NULA
-                   (*Raiz)->esq->cen = NULL; //O centro da esquerda se torna NULO
-                   
-                 
-                   *operacao = 1; //Sucesso, mas possivelmente vai precisar rebalancer lá fora                 
-               }
-              
-
+InfArv23 Pegar_Maior(Arv23Port *Raiz, int *operacao) {
+    // Itera até encontrar o maior elemento
+    *operacao = 0; //não deu certo
+    InfArv23 Info;
+    if(Raiz != NULL){
+        while (Raiz->dir != NULL || (Raiz->n_infos == 1 && Raiz->cen != NULL)) {
+            if (Raiz->dir != NULL) {
+                Raiz = Raiz->dir; // Vai para o filho direito se existir
+            } else {
+                Raiz = Raiz->cen; // Caso contrário, vai para o filho central
             }
-
-
-
-
-
-        }else if(tipo_movimento == 2){
-            //significa que estamos no Centro ou na Esquerda, buscaremos o maior valor
-            if(ehfolha((*Raiz)->esq)){
-                //Se a esquerda da sub-arvore é folha, significa que o Centro também é 
-                // Primeiro, verificamos, quantas Infos temos
-
-                if((*Raiz)->n_infos == 2){
-                    //Temos Duas Infos, então olharemos primeiro a direita 
-                    if((*Raiz)->dir->n_infos == 2){
-                        //Temos Duas Infos na direita, então.. 
-                        Valor = (*Raiz)->dir->info2; //A info2 da Direita se torna o valor que vai retornar 
-                        (*Raiz)->dir->n_infos = 1; //Numero de Infos é atualizado pra 1
-                        *operacao = 1;
-                    }else{
-                        //A direita não tem duas Infos
-                        //então olhamos pro Centro
-                        if((*Raiz)->cen->n_infos == 2){
-                            //Se o Centro possui duas Infos, então dá pra Inverter a Onda e pegar o Maior da Direita
-                            Valor = (*Raiz)->dir->info1; //A info1  da Direita por ser o Maior, vai retornar
-                            (*Raiz)->dir->info1 = (*Raiz)->info2; //A info2 da Raiz desce para ser a Info1 da direita
-                            (*Raiz)->info2 = (*Raiz)->cen->info2; //A Info2 do Centro sobe e se torna a Nova Info2 da Raiz
-                            (*Raiz)->cen->n_infos = 1; //Numero de Infos do Centro é atualizado
-                            *operacao = 1;
-                        }else{
-                            //O Centro não possui duas Infos, vamos agrupar
-                            Valor = (*Raiz)->dir->info1; //A Info1 da Direita se torna o valor que vai retornar
-                            (*Raiz)->cen->info2 = (*Raiz)->info2; //A Info2 da Raiz desce e se torna Info2 do Centro
-                            (*Raiz)->n_infos = 1; //Numero de Infos da Raiz é ajustado pra 1
-                            (*Raiz)->cen->n_infos = 2; //Numero de Infos do Filho do Centro é atualizado pra 2
-                            free((*Raiz)->dir); //Liberamos o Nó da Direita
-                            (*Raiz)->dir = NULL; //Direita da Raiz se torna NULO
-                            *operacao = 1;
-
-                        }
-                        
-                    }
-
-                }else{
-                    // Não temos duas Infos, então olharemos primeiro para o Centro
-                    if((*Raiz)->cen->n_infos == 2){
-                        //Se temos duas Infos no Centro, dá pra recuperar o Maior Valor
-                        Valor = (*Raiz)->cen->info2; 
-                        (*Raiz)->cen->n_infos = 1; 
-                        *operacao = 1;
-                    }else{
-                        //Não temos duas Infos no Centro, olhamos pra esquerda então
-                        if((*Raiz)->esq->n_infos == 2){
-                            //Temos duas Infos na Esquerda, dá pra fazer a Onda
-                            Valor = (*Raiz)->cen->info1; //A Info1 do Centro, por ser a Maior, vai retornar
-                            (*Raiz)->cen->info1 = (*Raiz)->info1; //A Info1 da Raiz, desce para ser a Info1 do Centro
-                            (*Raiz)->info1 = (*Raiz)->esq->info2; //A Info2 da Esquerda sobe para se tornar a Info1 da Raiz
-                            (*Raiz)->esq->n_infos = 1; //Numero de Infos da Esquerda é atualizado pra 1
-                            *operacao = 1;
-                        }
-
-                    }
-                }
-                
-                
-                
-
-
-            }else{
-                if((*Raiz)->n_infos == 2){
-                    //Como temos duas Infos e queremos o Maior, manda pra Direita
-                    qtd_descendentes = contar_descendentes((*Raiz)->dir); 
-
-                    if(qtd_descendentes > 3){
-                        Valor = movimento_de_sub_arvore(&((*Raiz)->dir), 2, &nova_operacao); //2 significa o Maior valor
-                        *operacao = nova_operacao; 
-                    }
-                }else{
-                    //Só temos uma Info, então o Maior está no Centro
-                    qtd_descendentes = contar_descendentes((*Raiz)->cen); 
-
-                    if(qtd_descendentes > 3){
-                        Valor = movimento_de_sub_arvore(&((*Raiz)->cen), 2, &nova_operacao); //2 significa o Maior valor
-                        *operacao = nova_operacao;
-                    }else if(qtd_descendentes == 3){
-                        //Vamos agregar o centro, pegar o maior e balancear posteriormente
-                        Valor = (*Raiz)->cen->cen->info1; //A Info1 do Centro do Centro se torna o valor recuperado
-                        (*Raiz)->cen->info2 = (*Raiz)->cen->info1; //A info1 do Centro se torna a Info2 do Centro
-                        (*Raiz)->cen->info1  = (*Raiz)->cen->esq->info1; //A info1 da Esquerda do Centro sobe e se torna a Info1 do Centro
-                        (*Raiz)->cen->n_infos = 2; //Numero de Infos é atualizado
-                        free((*Raiz)->cen->esq); //Libera a Esquerda do Centro
-                        free((*Raiz)->cen->cen); //Libera o Centro do Centro
-                        (*Raiz)->cen->esq = NULL; //A esquerda do Centro se torna NULA
-                        (*Raiz)->cen->cen = NULL; //O centro do centro se torna NULO
-                        *operacao = 1; //sucesso
-                       
-
-                    }
-                }
-
-                
-            } 
-
-
-
         }
+
+        Info = (Raiz->n_infos == 2) ? Raiz->info2 : Raiz->info1;
+        *operacao = 1; //sucesso
+
+    }    
+
+    // Se o nó tem 2 informações, retorna a maior (info2), senão retorna a única (info1)
+    return Info;
+}
+
+InfArv23 Pegar_Menor(Arv23Port *Raiz, int *operacao) {
+    // Itera até encontrar o menor elemento
+    *operacao = 0; //Não deu certo
+    InfArv23 Info; 
+   
+    if(Raiz != NULL){
+        while (Raiz->esq != NULL) { // Vai sempre para o filho esquerdo
+            Raiz = Raiz->esq;
+        }
+
+       
+        Info = Raiz->info1; 
+        *operacao = 1; //deu certo
+        
 
     }
 
-    return Valor;
-
+    // Retorna o status
+    return Info;
 }
-
-
 
 int RemoverInfo1Folha(Arv23Port **Raiz, Arv23Port **Pai){
     int operacao; 
@@ -455,6 +296,7 @@ int agregar_infos(Arv23Port **Raiz, int posicao){
 int Remover_Info_Nao_Folha(Arv23Port **Raiz, int Localizacao){
    int operacao = 1; //Deu certo
    InfArv23 Aux;
+   
 
    if(*Raiz != NULL){
        int qtd_descendentes; 
@@ -482,11 +324,14 @@ int Remover_Info_Nao_Folha(Arv23Port **Raiz, int Localizacao){
                                 if(qtd_descendentes >3){
                                     //Possuindo mais do que 3 Descendentes dá pra manipular 
                                     
-                                    Aux = movimento_de_sub_arvore(&((*Raiz)->dir), 1, &operacao);
-
+                                    Aux = Pegar_Menor((*Raiz)->dir, &operacao);                                                                    
+                                    
+                                    
                                      if(operacao == 1){
                                         (*Raiz)->info2 = Aux;
+                                        operacao = Remover_Arv23(&((*Raiz)->dir), NULL, (*Raiz)->info2);
                                      }
+                                
                                     
 
                                 }else{ 
@@ -521,10 +366,14 @@ int Remover_Info_Nao_Folha(Arv23Port **Raiz, int Localizacao){
 
                                 if(qtd_descendentes > 3){
                                     //Temos mais do que 3 Infos, dá pra manipular
-                                    Aux = movimento_de_sub_arvore(&((*Raiz)->cen), 2, &operacao); //2 significa que vamos recuperar o Maior  Valor
+                                    Aux = Pegar_Maior((*Raiz)->cen, &operacao); //Pega o menor da sub-arvore do centro
+                                    
+                                                                       
                                     if(operacao == 1){
                                         (*Raiz)->info2 = Aux;
+                                        operacao = Remover_Arv23(&((*Raiz)->cen), NULL, (*Raiz)->info2); 
                                     }
+                                    
                                     
                                 }else{
                                     //Não temos descendentes suficientes no Centro, pra Manipular dessa forma
@@ -581,10 +430,13 @@ int Remover_Info_Nao_Folha(Arv23Port **Raiz, int Localizacao){
 
                             if(qtd_descendentes > 3){
                                 //Temos mais de 3 descendentes no Centro, então podemos manipular
-                                Aux = movimento_de_sub_arvore(&((*Raiz)->cen), 1, &operacao); //1 significa que Pego o menor valor;
+                                Aux = Pegar_Menor((*Raiz)->cen, &operacao);                                
+                                
                                 if(operacao == 1){
                                     (*Raiz)->info1 = Aux; //Caso a operação tenha sido bem sucedida, será atribuido o novo valor
+                                     operacao = Remover_Arv23(&((*Raiz)->cen), NULL, (*Raiz)->info1); 
                                 }
+                                
                                 
                             }else{
                                 //Não temos o suficiente no Centro, olhamos na esquerda então 
@@ -592,12 +444,16 @@ int Remover_Info_Nao_Folha(Arv23Port **Raiz, int Localizacao){
 
                                 if(qtd_descendentes > 3){
 
+                                    Aux = Pegar_Maior((*Raiz)->esq, &operacao); //Pega o maior da sub-arvore da esquerda                                
+
                                     
-                                    Aux = movimento_de_sub_arvore(&((*Raiz)->esq), 2, &operacao); //2 significa que vamos recuperar o Maior Valor, nesse caso, o maior da esquerda
                                     if(operacao == 1){
                                         //Se o movimento deu certo, o novo valor é atribuido
                                         (*Raiz)->info1 = Aux;
+                                        operacao = Remover_Arv23(&((*Raiz)->esq), NULL, (*Raiz)->info1); 
                                      } 
+
+                                     
 
                                 }else{
                                     //Não há descendentes suficientes aqui, então, o jeito vai ser agregar
@@ -665,10 +521,13 @@ int Remover_Info_Nao_Folha(Arv23Port **Raiz, int Localizacao){
                        if(qtd_descendentes > 3){
                            // Tem mais de 3 descendentes, dá pra manipular
                            
-                           Aux = movimento_de_sub_arvore(&((*Raiz)->cen), 1, &operacao); //1, significa que pegarei o menor valor
+                           Aux = Pegar_Menor((*Raiz)->cen, &operacao); //Pega o menor da sub-árvore central
+                                                      
                            if(operacao == 1){
                               (*Raiz)->info1 = Aux;
+                               operacao = Remover_Arv23(&((*Raiz)->cen), NULL, (*Raiz)->info1); 
                            }
+                           
 
                        }else{
                            //O centro não possui duas Infos
@@ -677,10 +536,14 @@ int Remover_Info_Nao_Folha(Arv23Port **Raiz, int Localizacao){
                            qtd_descendentes = contar_descendentes((*Raiz)->esq); 
 
                            if(qtd_descendentes > 3){
-                               Aux = movimento_de_sub_arvore(&((*Raiz)->esq), 2, &operacao); //2, significa que pega o maior valor
+                               Aux = Pegar_Maior((*Raiz)->esq, &operacao); //Pega o maior da sub-arvore esquerda
+                               
+                                                            
                                if(operacao == 1){
                                   (*Raiz)->info1 = Aux; 
-                               }
+                                   operacao = Remover_Arv23(&((*Raiz)->esq), NULL, (*Raiz)->info1); 
+                               } 
+                               
                                
                            }else{
                                operacao = agregar_infos(Raiz, 1); //1 significa que o valor está na Info1
@@ -705,7 +568,7 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
     operacao = 0; //Tratamos que não deu certo
     Arv23Port *Aux; 
     Aux = NULL; 
-    InfArv23 Valor; 
+    InfArv23 Valor;   
     
     if(*Raiz != NULL){
       
@@ -782,16 +645,16 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                 }else if(qtd_descendentes > 3){
                   
                     //se o centro possui mais do que 3, precisamos apenas do menor valor
-                    Valor = movimento_de_sub_arvore(&((*Pai)->cen), 1, &operacao); //1 significa, o menor valor
-
+                    Valor = Pegar_Menor((*Raiz)->cen, &operacao); //Pega o menor da sub-arvore central
+                    
                     if(operacao == 1){
-                       //Significa que conseguimos o menor valor de lá, então dá pra manipular
-                       (*Raiz)->cen->info2 = (*Pai)->info1; //A Info1 do Pai desce e se torna a Info2 do Centro da Raiz
-                       (*Raiz)->cen->n_infos = 2; //Numero de Infos do Filho do Centro é atualizado pra 2; 
-                       (*Pai)->info1 = Valor; //O menor valor, se torna a nova Info1 do Pai; 
-                       operacao = Remover_Arv23(Raiz, NULL, Info); //Mando a função de remover, pra retirar o valor que eu queria antes; 
+                    //Significa que conseguimos o menor valor de lá, então dá pra manipular
+                    (*Raiz)->cen->info2 = (*Pai)->info1; //A Info1 do Pai desce e se torna a Info2 do Centro da Raiz
+                    (*Raiz)->cen->n_infos = 2; //Numero de Infos do Filho do Centro é atualizado pra 2; 
+                    (*Pai)->info1 = Valor; //O menor valor, se torna a nova Info1 do Pai; 
+                    operacao = Remover_Arv23(Raiz, NULL, Info); //Mando a função de remover, pra retirar o valor que eu queria antes; 
 
-                    }
+                   }
 
                     
 
@@ -808,17 +671,16 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                 if(qtd_descendentes > 3){
                     
                     //Temos mais de 3 Infos no Centro, então podemos pegar o Menor
-                    
-                    Valor = movimento_de_sub_arvore(&((*Pai)->cen), 1, &operacao);//1 significa o menor valor
+                    Valor = Pegar_Menor((*Raiz)->cen, &operacao); //Pega o menor da sub-arvore central
 
-                    if(operacao == 1){
-                       //Significa que conseguimos o menor valor de lá, então dá pra manipular
-                       (*Raiz)->cen->info2 = (*Pai)->info1; //A Info1 do Pai desce e se torna a Info2 do Centro da Raiz
-                       (*Raiz)->cen->n_infos = 2; //Numero de Infos do Filho do Centro é atualizado pra 2; 
-                       (*Pai)->info1 = Valor; //O menor valor, se torna a nova Info1 do Pai; 
-                       operacao = Remover_Arv23(Raiz, NULL, Info); //Mando a função de remover, pra retirar o valor que eu queria antes; 
+                   if(operacao == 1){
+                    //Significa que conseguimos o menor valor de lá, então dá pra manipular
+                    (*Raiz)->cen->info2 = (*Pai)->info1; //A Info1 do Pai desce e se torna a Info2 do Centro da Raiz
+                    (*Raiz)->cen->n_infos = 2; //Numero de Infos do Filho do Centro é atualizado pra 2; 
+                    (*Pai)->info1 = Valor; //O menor valor, se torna a nova Info1 do Pai; 
+                    operacao = Remover_Arv23(Raiz, NULL, Info); //Mando a função de remover, pra retirar o valor que eu queria antes; 
 
-                    }
+                   }
 
                 }else{
                     //O centro não possui mais do que 3 Infos, olhamos na direita
@@ -827,9 +689,9 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                     if(qtd_descendentes > 3){
                        
                         //temos mais do que 3 Infos na direita, precisamos da Menor
-                        Valor = movimento_de_sub_arvore(&((*Pai)->dir), 1, &operacao);
+                        Valor = Pegar_Menor((*Raiz)->dir, &operacao); //Pega o menor da sub-arvore direita
 
-                        if(operacao == 1){
+                       if(operacao == 1){
                             //Conseguimos o menor valor da direita, agora, precisamos operar algumas coisas antes
                             //Precisamos Inserir a Info2 do Pai na sub-arvore central
                             insereArv23(&((*Pai)->cen), (*Pai)->info2, NULL, NULL, &operacao); 
@@ -837,7 +699,8 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                                 //A inserção na sub-arvore foi bem sucedida, então, podemos colocar o Menor valor encontrado, na Info2 do Pai
                                 (*Pai)->info2 = Valor; 
                                 //Proximo passo, é retirar o menor valor do Centro, agora que ele possui 4 Infos, é possivel
-                                Valor = movimento_de_sub_arvore(&((*Pai)->cen), 1, &operacao); //1 significa menor valor da sub-arvore
+                                
+                                Valor = Pegar_Menor((*Raiz)->cen, &operacao); //Pega o menor na sub-arvore central
 
                                 if(operacao == 1){
                                     //Deu certo pegar o menor valor, então fazemos outra inserção, na Esquerda, dessa vez, mandando Info1 do Pai
@@ -853,11 +716,11 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                                     }
                                     
 
-                                } 
+                                 } 
 
                             }
 
-                        } 
+                    } 
 
                     }else if(qtd_descendentes == 3){
                        
@@ -879,8 +742,9 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                             //Inserção na sub-arvore foi bem sucedida
                             (*Pai)->info2 = Valor; //A nova Info2 do Pai é o valor recuperado
 
-                            //Proximo passo é conseguir o menor do Centro
-                            Valor = movimento_de_sub_arvore(&((*Pai)->cen), 1, &operacao); 
+                            //Proximo passo é conseguir o menor do Centro 
+                            Valor = Pegar_Menor((*Raiz)->cen, &operacao); 
+                           
 
                             if(operacao == 1){
                                 //Deu certo pegar o menor, agora, inserimos Info1 do Pai na sub-arvore à esquerda 
@@ -892,7 +756,7 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                                     operacao = Remover_Arv23(&((*Pai)->esq), NULL, Info); //manda a remoção pra cuidar do caso
                                 }
 
-                            }
+                           }
                         }
 
                     }
@@ -918,9 +782,9 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
 
                 if(qtd_descendentes > 3){
                     //Temos mais do que 3 Infos, dá pra pegar o menor valor
-                    Valor = movimento_de_sub_arvore(&((*Pai)->dir), 1, &operacao); 
+                    Valor = Pegar_Menor((*Raiz)->dir, &operacao); 
 
-                    if(operacao == 1){
+                   if(operacao == 1){
                         //Deu certo pegar o menor, então podemos prosseguir
                         //Inserindo o Info2 no Centro, onde estou
                         insereArv23(&((*Pai)->cen), (*Pai)->info2, NULL, NULL, &operacao); 
@@ -930,7 +794,7 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                             (*Pai)->info2 = Valor; 
                             operacao = Remover_Arv23(&((*Pai)->cen), NULL, Info); //Remoção é chamada pra cuidar do caso simples
                         }
-                    }
+                   }
 
                 }else if(qtd_descendentes == 3){
                    
@@ -964,10 +828,10 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                 if(qtd_descendentes > 3){
                     //temos mais do que 3 descendentes na esquerda
 
-                    Valor = movimento_de_sub_arvore(&((*Pai)->esq), 2, &operacao);
+                    Valor = Pegar_Maior((*Raiz)->esq, &operacao); 
 
                     if(operacao == 1){
-                        //Deu certo pegar o Maior valor, agora inserimos Info1 do Pai na sub-arvore do centro
+                    //Deu certo pegar o Maior valor, agora inserimos Info1 do Pai na sub-arvore do centro
 
                         insereArv23(&((*Pai)->cen), (*Pai)->info1, NULL, NULL, &operacao); 
 
@@ -976,7 +840,7 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
                             (*Pai)->info1 = Valor; 
                             operacao = Remover_Arv23(&((*Pai)->cen), NULL, Info); //Manda a remoção pra cuidar de um caso mais simples
                         }
-                    }
+                 }
                 }else if(qtd_descendentes == 3){
                    
                     //temos apenas 3 descendentes, agrega e depois balanceia 
@@ -1018,8 +882,7 @@ int tratando_pendencias(Arv23Port **Raiz, Arv23Port **Pai, InfArv23 Info, int po
             if(qtd_descendentes > 3){
                
                 //Temos mais do que 3 descendentes na sub-arvore do centro, dá pra manipular
-
-                Valor = movimento_de_sub_arvore(&((*Pai)->cen), 2, &operacao); //2 significa maior valor
+                Valor = Pegar_Maior((*Raiz)->cen, &operacao);
 
                 if(operacao == 1){
                     //deu certo pegar o maior valor
